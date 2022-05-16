@@ -83,7 +83,7 @@
     <ClInclude Include="..\external\fmt\include\fmt\core.h" />
     <ClInclude Include="..\external\fmt\include\fmt\format-inl.h" />
     <ClInclude Include="..\external\fmt\include\fmt\format.h" />
-    <ClInclude Include="BasisCLR.h" />
+    <ClInclude Include="BasisEncoder.h" />
     <ClInclude Include="Driver.h" />
     <ClInclude Include="Encoder.h" />
     <ClInclude Include="pch.h" />
@@ -97,7 +97,7 @@
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</CompileAsManaged>
     </ClCompile>
     <ClCompile Include="AssemblyInfo.cpp" />
-    <ClCompile Include="BasisCLR.cpp" />
+    <ClCompile Include="BasisEncoder.cpp" />
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="Encoder.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</CompileAsManaged>
