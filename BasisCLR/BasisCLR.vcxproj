@@ -46,10 +46,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\Projects\C#\SuperCompressedDotNet\external\basis_universal\OpenCL;D:\Projects\C#\SuperCompressedDotNet\external\basis_universal\encoder;D:\Projects\C#\SuperCompressedDotNet\external\basis_universal\transcoder;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)external\basis_universal\OpenCL;$(SolutionDir)external\basis_universal\encoder;$(SolutionDir)external\basis_universal\transcoder;$(SolutionDir)external\fmt\include;$(IncludePath)</IncludePath>
+    <SourcePath>$(SourcePath)</SourcePath>
+    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>D:\Projects\C#\SuperCompressedDotNet\external\basis_universal\OpenCL;D:\Projects\C#\SuperCompressedDotNet\external\basis_universal\encoder;D:\Projects\C#\SuperCompressedDotNet\external\basis_universal\transcoder;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)external\basis_universal\OpenCL;$(SolutionDir)external\basis_universal\encoder;$(SolutionDir)external\basis_universal\transcoder;$(SolutionDir)external\fmt\include;$(IncludePath)</IncludePath>
+    <SourcePath>$(SourcePath)</SourcePath>
+    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -60,7 +64,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>opencl64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\Projects\C#\SuperCompressedDotNet\external\basis_universal\OpenCL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)external\basis_universal\OpenCL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -72,10 +76,13 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>opencl64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\Projects\C#\SuperCompressedDotNet\external\basis_universal\OpenCL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)external\basis_universal\OpenCL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\external\fmt\include\fmt\core.h" />
+    <ClInclude Include="..\external\fmt\include\fmt\format-inl.h" />
+    <ClInclude Include="..\external\fmt\include\fmt\format.h" />
     <ClInclude Include="BasisCLR.h" />
     <ClInclude Include="Driver.h" />
     <ClInclude Include="Encoder.h" />
@@ -83,6 +90,12 @@
     <ClInclude Include="Resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\external\fmt\src\format.cc">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</CompileAsManaged>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</CompileAsManaged>
+    </ClCompile>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="BasisCLR.cpp" />
     <ClCompile Include="Driver.cpp" />
