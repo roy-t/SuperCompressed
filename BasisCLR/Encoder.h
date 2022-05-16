@@ -1,14 +1,23 @@
 #pragma once
 
-#include <string>
+using namespace System;
 
-class Encoder
-{
-public:
-	void Init();
+class NativeEncoder;
 
-	void Encode(const std::string& filename);
-	
-	void Deinit();
+namespace SuperCompressed {
+	namespace BasisUniversal
+	{
+		public ref class Encoder : IDisposable
+		{
+		private:
+			NativeEncoder* encoder;
 
-};
+		public:
+			Encoder();
+			~Encoder();
+
+		public:
+			array<Byte>^ Encode(String^ filename);
+		};
+	}
+}

@@ -1,25 +1,39 @@
+#include "NativeEncoder.h"
+
+#include <assert.h>
+#include <msclr\marshal_cppstd.h>
+
 #include "Encoder.h"
 
-#include <basisu.h>
-#include <basisu_enc.h>
-#include <fmt/format.h>
-
-void Encoder::Init()
+SuperCompressed::BasisUniversal::Encoder::Encoder()
 {
-	basisu::basisu_encoder_init();
+	this->encoder = new NativeEncoder();
+	this->encoder->Init();	
 }
 
-void Encoder::Encode(const std::string &filename)
+SuperCompressed::BasisUniversal::Encoder::~Encoder()
 {
-	basisu::image image;
-	if (!basisu::load_image(filename, image))
+	if (this->encoder != nullptr)
 	{
-		std::string error = fmt::format("Failed to load image {}.", filename);		
-		throw std::exception(error.c_str());
+		this->encoder->Deinit();
+		this->encoder = nullptr;
 	}
 }
 
-void Encoder::Deinit()
+array<Byte>^ SuperCompressed::BasisUniversal::Encoder::Encode(String^ filename)
 {
-	basisu::basisu_encoder_deinit();
+	assert(this->encoder != nullptr);
+
+	auto filenameC = msclr::interop::marshal_as<std::string>(filename);
+
+	try
+	{
+		this->encoder->Encode(filenameC);
+		return gcnew array<Byte>(0);
+	}
+	catch (std::exception& exception)
+	{
+		auto message = gcnew String(exception.what());
+		throw gcnew Exception(message);
+	}	
 }
