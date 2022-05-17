@@ -1,14 +1,15 @@
 #pragma once
 
+#include <memory>
 #include <string>
+#include <vector>
 
 class NativeEncoder
 {
 public:
 	void Init();
 
-	void Encode(const std::string& filename);
+	const std::vector<uint8_t> Encode(const std::string& filename);
 	
 	void Deinit();
-
 };
