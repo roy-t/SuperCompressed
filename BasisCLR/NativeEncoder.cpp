@@ -11,7 +11,7 @@ void NativeEncoder::Init()
 	basisu_encoder_init();
 }
 
-const std::vector<uint8_t> NativeEncoder::Encode(const std::string &filename)
+const uint8_vec NativeEncoder::Encode(const std::string &filename)
 {
 	image image;
 	if (!load_image(filename, image))
@@ -45,11 +45,7 @@ const std::vector<uint8_t> NativeEncoder::Encode(const std::string &filename)
 		throw std::exception(error.c_str());
 	}
 
-	auto& output = compressor.get_output_basis_file();		
-	auto data = std::vector<uint8_t>(output.size());
-	memcpy_s(&data[0], data.size(), &output[0], output.size());
-	
-	return data;
+	return compressor.get_output_basis_file();
 }
 
 void NativeEncoder::Deinit()

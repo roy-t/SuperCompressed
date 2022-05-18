@@ -3,13 +3,14 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <basisu.h>
 
 class NativeEncoder
 {
 public:
 	void Init();
 
-	const std::vector<uint8_t> Encode(const std::string& filename);
+	const basisu::uint8_vec Encode(const std::string& filename);
 	
 	void Deinit();
 };
