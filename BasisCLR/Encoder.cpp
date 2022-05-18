@@ -19,7 +19,7 @@ SuperCompressed::BasisUniversal::Encoder::~Encoder()
 	}
 }
 
-array<Byte>^ SuperCompressed::BasisUniversal::Encoder::Encode(String^ filename)
+array<Byte>^ SuperCompressed::BasisUniversal::Encoder::Encode(String^ filename, EncoderSettings^ settings)
 {
 	assert(this->encoder != nullptr);
 
@@ -27,7 +27,16 @@ array<Byte>^ SuperCompressed::BasisUniversal::Encoder::Encode(String^ filename)
 
 	try
 	{
-		auto output = this->encoder->Encode(filenameC);
+		NativeEncoderSettings nativeSettings
+		{			
+			settings->Threads,
+			settings->Perceptual,
+			settings->Alpha,
+			settings->Uastc,
+			settings->Mipmap
+		};
+
+		auto output = this->encoder->Encode(filenameC, nativeSettings);
 
 		auto buffer = gcnew array<Byte>((int)output.size());
 		pin_ptr<Byte> bufferStart = &buffer[0];		
@@ -40,4 +49,13 @@ array<Byte>^ SuperCompressed::BasisUniversal::Encoder::Encode(String^ filename)
 		auto message = gcnew String(exception.what());
 		throw gcnew Exception(message);
 	}	
+}
+
+SuperCompressed::BasisUniversal::EncoderSettings::EncoderSettings()
+{	
+	Threads = 1;
+	Perceptual = true;
+	Alpha = true;
+	Uastc = false;
+	Mipmap = false;
 }
