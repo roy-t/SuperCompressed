@@ -4,8 +4,6 @@
 #include <basisu_comp.h>
 #include <fmt/format.h>
 
-#include <basisu_enc.h>
-
 using namespace basisu;
 
 void NativeEncoder::Init()
@@ -13,7 +11,7 @@ void NativeEncoder::Init()
 	basisu_encoder_init();	
 }
 
-const uint8_vec NativeEncoder::Encode(const std::string &filename, const NativeEncoderSettings settings)
+const uint8_vec NativeEncoder::Encode(const std::string &filename)
 {
 	image image;
 	if (!load_image(filename, image))
@@ -22,29 +20,26 @@ const uint8_vec NativeEncoder::Encode(const std::string &filename, const NativeE
 		throw std::exception(error.c_str());
 	}
 
-	return Encode(image, settings, filename);
+	return Encode(image, filename);
 }
 
-const basisu::uint8_vec NativeEncoder::Encode(uint8_t* pImage, uint32_t width, uint32_t height, const NativeEncoderSettings settings, const std::string& name)
+const basisu::uint8_vec NativeEncoder::Encode(uint8_t* pImage, uint32_t width, uint32_t height, const std::string& name)
 {
 	image foo = image(width, height);
 	foo.grant_ownership(reinterpret_cast<color_rgba*>(pImage), width, height);
 
-	return Encode(foo, settings, name);
+	return Encode(foo, name);
 }
 
-const uint8_vec NativeEncoder::Encode(const image& image, const NativeEncoderSettings settings, const std::string &name)
+const uint8_vec NativeEncoder::Encode(const image& image, const std::string &name)
 {
 	basis_compressor_params params;
 	params.m_source_images.push_back(image);
-	//params.m_perceptual = settings.m_perceptual;
-	//params.m_check_for_alpha = settings.m_alpha;
-	params.m_uastc = false;// settings.m_uastc;
-	//params.m_write_output_basis_files = false;
-	//params.m_mip_gen = settings.m_mipmap;
+	params.m_uastc = false;
+	params.m_quality_level = 128;
 
-	job_pool jpool(settings.m_threads);
-	params.m_pJob_pool = &jpool;	
+	job_pool jpool(8);
+	params.m_pJob_pool = &jpool;
 
 	basis_compressor compressor;
 

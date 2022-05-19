@@ -47,12 +47,10 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(SolutionDir)external\basis_universal\OpenCL;$(SolutionDir)external\basis_universal\encoder;$(SolutionDir)external\basis_universal\transcoder;$(SolutionDir)external\fmt\include;$(IncludePath)</IncludePath>
-    <SourcePath>$(SourcePath)</SourcePath>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(SolutionDir)external\basis_universal\OpenCL;$(SolutionDir)external\basis_universal\encoder;$(SolutionDir)external\basis_universal\transcoder;$(SolutionDir)external\fmt\include;$(IncludePath)</IncludePath>
-    <SourcePath>$(SourcePath)</SourcePath>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

@@ -4,6 +4,7 @@
 #include <msclr\marshal_cppstd.h>
 #include "Encoder.h"
 
+
 SuperCompressed::BasisUniversal::Encoder::Encoder()
 {
 	this->encoder = new NativeEncoder();
@@ -19,24 +20,15 @@ SuperCompressed::BasisUniversal::Encoder::~Encoder()
 	}
 }
 
-array<Byte>^ SuperCompressed::BasisUniversal::Encoder::Encode(String^ filename, EncoderSettings^ settings)
+array<Byte>^ SuperCompressed::BasisUniversal::Encoder::Encode(String^ filename)
 {
 	assert(this->encoder != nullptr);
 
 	auto filenameC = msclr::interop::marshal_as<std::string>(filename);
 
 	try
-	{
-		NativeEncoderSettings nativeSettings
-		{			
-			settings->Threads,
-			settings->Perceptual,
-			settings->Alpha,
-			settings->Uastc,
-			settings->Mipmap
-		};
-
-		auto output = this->encoder->Encode(filenameC, nativeSettings);
+	{		
+		auto output = this->encoder->Encode(filenameC);
 
 		auto buffer = gcnew array<Byte>((int)output.size());
 		pin_ptr<Byte> bufferStart = &buffer[0];		
@@ -49,13 +41,4 @@ array<Byte>^ SuperCompressed::BasisUniversal::Encoder::Encode(String^ filename, 
 		auto message = gcnew String(exception.what());
 		throw gcnew Exception(message);
 	}	
-}
-
-SuperCompressed::BasisUniversal::EncoderSettings::EncoderSettings()
-{	
-	Threads = 1;
-	Perceptual = true;
-	Alpha = true;
-	Uastc = false;
-	Mipmap = false;
 }
