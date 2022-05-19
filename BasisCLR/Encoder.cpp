@@ -4,7 +4,6 @@
 #include <msclr\marshal_cppstd.h>
 #include "Encoder.h"
 
-
 SuperCompressed::BasisUniversal::Encoder::Encoder()
 {
 	this->encoder = new NativeEncoder();
@@ -20,6 +19,28 @@ SuperCompressed::BasisUniversal::Encoder::~Encoder()
 	}
 }
 
+array<Byte>^ SuperCompressed::BasisUniversal::Encoder::Encode(array<uint8_t>^ data, uint32_t width, uint32_t height, String^ name)
+{
+	auto nameC = msclr::interop::marshal_as<std::string>(name);
+
+	try
+	{
+		auto size = sizeof(uint8_t) * data->Length;		
+		uint8_t *pImage = (uint8_t *)malloc(size);		
+		pin_ptr<uint8_t> pData = &data[0];
+		
+		memcpy_s(pImage, size, pData, size);
+		
+		auto output = this->encoder->Encode(pImage, width, height, nameC);
+		return CreateManagedBuffer(output);
+	}
+	catch (std::exception& exception)
+	{
+		auto message = gcnew String(exception.what());
+		throw gcnew Exception(message);
+	}
+}
+
 array<Byte>^ SuperCompressed::BasisUniversal::Encoder::Encode(String^ filename)
 {
 	assert(this->encoder != nullptr);
@@ -29,16 +50,20 @@ array<Byte>^ SuperCompressed::BasisUniversal::Encoder::Encode(String^ filename)
 	try
 	{		
 		auto output = this->encoder->Encode(filenameC);
-
-		auto buffer = gcnew array<Byte>((int)output.size());
-		pin_ptr<Byte> bufferStart = &buffer[0];		
-		memcpy_s(bufferStart, buffer->Length, &output[0], output.size());
-
-		return buffer;
+		return CreateManagedBuffer(output);
 	}
 	catch (std::exception& exception)
 	{
 		auto message = gcnew String(exception.what());
 		throw gcnew Exception(message);
 	}	
+}
+
+inline array<Byte>^ SuperCompressed::BasisUniversal::Encoder::CreateManagedBuffer(basisu::uint8_vec output)
+{
+	auto buffer = gcnew array<Byte>((int)output.size());
+	pin_ptr<Byte> bufferStart = &buffer[0];
+	memcpy_s(bufferStart, buffer->Length, &output[0], output.size());
+
+	return buffer;
 }
