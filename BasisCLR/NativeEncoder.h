@@ -1,8 +1,6 @@
 #pragma once
-
-#include <memory>
+#include <cstdint>
 #include <string>
-#include <vector>
 #include <basisu.h>
 
 namespace basisu

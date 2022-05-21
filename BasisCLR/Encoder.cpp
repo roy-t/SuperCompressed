@@ -1,8 +1,11 @@
+#include "Encoder.h"
 #include "NativeEncoder.h"
 
+#include <string>
 #include <assert.h>
 #include <msclr\marshal_cppstd.h>
-#include "Encoder.h"
+
+using namespace System;
 
 SuperCompressed::BasisUniversal::Encoder::Encoder()
 {
@@ -15,6 +18,7 @@ SuperCompressed::BasisUniversal::Encoder::~Encoder()
 	if (this->encoder != nullptr)
 	{
 		this->encoder->Deinit();
+		delete this->encoder;
 		this->encoder = nullptr;
 	}
 }

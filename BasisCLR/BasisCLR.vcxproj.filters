@@ -33,6 +33,12 @@
     <ClInclude Include="..\external\fmt\include\fmt\format-inl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="NativeTranscoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Transcoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Encoder.cpp">
@@ -45,6 +51,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\external\fmt\src\format.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NativeTranscoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Transcoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

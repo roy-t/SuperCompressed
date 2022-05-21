@@ -9,7 +9,7 @@ namespace BasisCLR.Tests
     public class BasisEncoderTests
     {
         [Fact]
-        public void CanCreateAndDestroy()
+        public void CreateAndDestroy()
         {
             using var encoder = new Encoder();
             encoder.Dispose();
@@ -17,7 +17,7 @@ namespace BasisCLR.Tests
 
 
         [Fact]
-        public void FailsOnWrongFilename()
+        public void WrongFilename()
         {
             using var encoder = new Encoder();
 
@@ -25,17 +25,40 @@ namespace BasisCLR.Tests
         }
 
         [Fact]
-        public void EncodeDoesSomething()
-        {            
-            var cwd = Directory.GetCurrentDirectory();
-            var filename = Path.GetFullPath(Path.Combine(cwd, "../../../../../Assets/image_with_alpha.tga"));
-
-            True(File.Exists(filename));
-
+        public void Encode()
+        {
+            string filename = GetTestFilename();            
             using var encoder = new Encoder();
             var bytes = encoder.Encode(filename);
-            
+
             True(bytes.Length > 0);
-        }        
+        }       
+
+        [Fact]
+        public void Transcode()
+        {
+            string filename = GetTestFilename();
+            using var encoder = new Encoder();
+            var encodedBytes = encoder.Encode(filename);
+
+            True(encodedBytes.Length > 0);
+
+            using var transcoder = new Transcoder();
+            var transcodedBytes = transcoder.Transcode(encodedBytes, filename);
+
+            True(transcodedBytes.Length > 0);
+            True(transcodedBytes.Length >= encodedBytes.Length);
+        }
+
+        private static string GetTestFilename()
+        {
+            var cwd = Directory.GetCurrentDirectory();
+            var filename = Path.GetFullPath(Path.Combine(cwd, "../../../../../Assets/image_with_alpha.tga"));
+            
+            True(File.Exists(filename));
+
+            return filename;
+        }
+
     }
 }

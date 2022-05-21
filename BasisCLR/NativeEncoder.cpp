@@ -33,15 +33,15 @@ const basisu::uint8_vec NativeEncoder::Encode(uint8_t* pImage, uint32_t width, u
 
 const uint8_vec NativeEncoder::Encode(const image& image, const std::string &name)
 {
-	basis_compressor_params params;
+	basis_compressor_params params{};
 	params.m_source_images.push_back(image);
 	params.m_uastc = false;
 	params.m_quality_level = 128;
 
-	job_pool jpool(8);
+	job_pool jpool{ 8 };
 	params.m_pJob_pool = &jpool;
 
-	basis_compressor compressor;
+	basis_compressor compressor{};
 
 	if (!compressor.init(params))
 	{

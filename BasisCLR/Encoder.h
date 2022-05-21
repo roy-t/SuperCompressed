@@ -1,16 +1,14 @@
 #pragma once
-
-using namespace System;
+#include <cstdint>
+#include <basisu.h>
 
 class NativeEncoder;
 
 namespace SuperCompressed 
 {
 	namespace BasisUniversal
-	{		
-		ref class EncoderSettings;
-
-		public ref class Encoder : IDisposable
+	{
+		public ref class Encoder : System::IDisposable
 		{
 		private:
 			NativeEncoder* encoder;
@@ -19,10 +17,10 @@ namespace SuperCompressed
 			Encoder();
 			~Encoder();
 
-			array<Byte>^ Encode(array<uint8_t>^ data, uint32_t width, uint32_t height, String^ name);
-			array<Byte>^ Encode(String^ filename);
+			array<System::Byte>^ Encode(array<uint8_t>^ data, uint32_t width, uint32_t height, System::String^ name);
+			array<System::Byte>^ Encode(System::String^ filename);
 		private:
-			array<Byte>^ CreateManagedBuffer(basisu::uint8_vec output);
+			array<System::Byte>^ CreateManagedBuffer(basisu::uint8_vec output);
 		};		
 	}
 }
