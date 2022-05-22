@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Format Library">
+      <UniqueIdentifier>{e673cefc-254b-4cd9-9b0c-8d6fc453b992}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Encoder.h">
@@ -24,20 +27,20 @@
     <ClInclude Include="NativeEncoder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\external\fmt\include\fmt\core.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\fmt\include\fmt\format.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\fmt\include\fmt\format-inl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="NativeTranscoder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Transcoder.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\fmt\include\fmt\core.h">
+      <Filter>Format Library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\fmt\include\fmt\format.h">
+      <Filter>Format Library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\fmt\include\fmt\format-inl.h">
+      <Filter>Format Library</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -50,14 +53,14 @@
     <ClCompile Include="NativeEncoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\external\fmt\src\format.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="NativeTranscoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Transcoder.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\fmt\src\format.cc">
+      <Filter>Format Library</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

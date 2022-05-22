@@ -46,12 +46,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)external\basis_universal\OpenCL;$(SolutionDir)external\basis_universal\encoder;$(SolutionDir)external\basis_universal\transcoder;$(SolutionDir)external\fmt\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)src\external\basis_universal\OpenCL;$(SolutionDir)src\external\basis_universal\encoder;$(SolutionDir)src\external\basis_universal\transcoder;$(SolutionDir)src\external\fmt\include;$(IncludePath)</IncludePath>
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)out\bin\$(Configuration)-$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)out\obj\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)external\basis_universal\OpenCL;$(SolutionDir)external\basis_universal\encoder;$(SolutionDir)external\basis_universal\transcoder;$(SolutionDir)external\fmt\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)src\external\basis_universal\OpenCL;$(SolutionDir)src\external\basis_universal\encoder;$(SolutionDir)src\external\basis_universal\transcoder;$(SolutionDir)src\external\fmt\include;$(IncludePath)</IncludePath>
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)out\bin\$(Configuration)-$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)out\obj\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -63,7 +67,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>opencl64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)external\basis_universal\OpenCL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)src\external\basis_universal\OpenCL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -76,13 +80,13 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>opencl64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)external\basis_universal\OpenCL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)src\external\basis_universal\OpenCL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\external\fmt\include\fmt\core.h" />
-    <ClInclude Include="..\external\fmt\include\fmt\format-inl.h" />
-    <ClInclude Include="..\external\fmt\include\fmt\format.h" />
+	<ClInclude Include="..\external\fmt\include\fmt\core.h" />
+	<ClInclude Include="..\external\fmt\include\fmt\format-inl.h" />
+	<ClInclude Include="..\external\fmt\include\fmt\format.h" />
     <ClInclude Include="Encoder.h" />
     <ClInclude Include="NativeEncoder.h" />
     <ClInclude Include="NativeTranscoder.h" />
@@ -90,12 +94,12 @@
     <ClInclude Include="Transcoder.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\external\fmt\src\format.cc">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+	<ClCompile Include="..\external\fmt\src\format.cc">
+	  <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</CompileAsManaged>
-      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</CompileAsManaged>
-    </ClCompile>
+	  <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</CompileAsManaged>
+	</ClCompile>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="Encoder.cpp" />
     <ClCompile Include="NativeEncoder.cpp">
