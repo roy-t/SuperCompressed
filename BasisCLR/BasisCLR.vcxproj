@@ -117,7 +117,7 @@
     <Image Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\external\basis_universal\basisu.vcxproj">
+    <ProjectReference Include="..\external\basisu_lib.vcxproj">
       <Project>{59586a07-8e7e-411d-bc3d-387e039aa423}</Project>
     </ProjectReference>
   </ItemGroup>
