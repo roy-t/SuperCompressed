@@ -53,7 +53,7 @@ namespace BasisCLR.Tests
         private static string GetTestFilename()
         {
             var cwd = Directory.GetCurrentDirectory();
-            var filename = Path.GetFullPath(Path.Combine(cwd, "../../../../../Assets/image_with_alpha.tga"));
+            var filename = Path.GetFullPath(Path.Combine(cwd, "../../../../image_with_alpha.tga"));
             
             True(File.Exists(filename));
 
