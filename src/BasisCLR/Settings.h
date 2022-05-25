@@ -56,27 +56,29 @@ float reinterpret_as_float(int32_t value)
 	return u.f;
 }
 
-enum encoder_settings : uint32_t
+struct encoder_settings
 {
-	compression_level,
-	selector_rdo_thresh,
-	endpoint_rdo_thresh,
-	mip_scale,
-	mip_smallest_dimension,
-	max_endpoint_clusters,
-	max_selector_clusters,
-	quality_level,
-	pack_uastc_flags,
-	rdo_uastc_quality_scalar,
-	rdo_uastc_dict_size,
-	rdo_uastc_max_smooth_block_error_scale,
-	rdo_uastc_smooth_block_max_std_dev,
-	rdo_uastc_max_allowed_rms_increase_ratio,
-	rdo_uastc_skip_block_rms_thresh,
-	resample_width,
-	resample_height,
-	resample_factor,
-	ktx2_uastc_supercompression,
-	ktx2_zstd_supercompression_level,
-	max_encoder_settings,
+	bool uastc;
+	bool y_flip;
+	bool perceptual;
+	int32_t compression_level;
+	float selector_rdo_thresh;
+	float endpoint_rdo_thresh;
+	float mip_scale;
+	int32_t mip_smallest_dimension;
+	uint32_t max_endpoint_clusters;
+	uint32_t max_selector_clusters;
+	int32_t quality_level;
+	uint32_t pack_uastc_flags;
+	float rdo_uastc_quality_scalar;
+	int32_t rdo_uastc_dict_size;
+	float rdo_uastc_max_smooth_block_error_scale;
+	float rdo_uastc_smooth_block_max_std_dev;
+	float rdo_uastc_max_allowed_rms_increase_ratio;
+	float rdo_uastc_skip_block_rms_thresh;
+	int32_t resample_width;
+	int32_t resample_height;
+	float resample_factor;
+	uint32_t ktx2_uastc_supercompression;
+	int32_t ktx2_zstd_supercompression_level;
 };
