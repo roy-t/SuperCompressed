@@ -42,6 +42,12 @@
     <ClInclude Include="..\external\fmt\include\fmt\format-inl.h">
       <Filter>Format Library</Filter>
     </ClInclude>
+    <ClInclude Include="EncoderSettings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Encoder.cpp">
@@ -61,6 +67,9 @@
     </ClCompile>
     <ClCompile Include="..\external\fmt\src\format.cc">
       <Filter>Format Library</Filter>
+    </ClCompile>
+    <ClCompile Include="EncoderSettings.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -9,17 +9,17 @@ using namespace System;
 
 SuperCompressed::BasisUniversal::Encoder::Encoder()
 {
-	this->encoder = new NativeEncoder();
-	this->encoder->Init();	
+	encoder = new NativeEncoder();
+	encoder->Init();	
 }
 
 SuperCompressed::BasisUniversal::Encoder::~Encoder()
 {
-	if (this->encoder != nullptr)
+	if (encoder != nullptr)
 	{
-		this->encoder->Deinit();
-		delete this->encoder;
-		this->encoder = nullptr;
+		encoder->Deinit();
+		delete encoder;
+		encoder = nullptr;
 	}
 }
 
@@ -35,7 +35,7 @@ array<Byte>^ SuperCompressed::BasisUniversal::Encoder::Encode(array<uint8_t>^ da
 		
 		memcpy_s(pImage, size, pData, size);
 		
-		auto output = this->encoder->Encode(pImage, width, height, nameC);
+		auto output = encoder->Encode(pImage, width, height, nameC);
 		return CreateManagedBuffer(output);
 	}
 	catch (std::exception& exception)
@@ -47,13 +47,13 @@ array<Byte>^ SuperCompressed::BasisUniversal::Encoder::Encode(array<uint8_t>^ da
 
 array<Byte>^ SuperCompressed::BasisUniversal::Encoder::Encode(String^ filename)
 {
-	assert(this->encoder != nullptr);
+	assert(encoder != nullptr);
 
 	auto filenameC = msclr::interop::marshal_as<std::string>(filename);
 
 	try
 	{		
-		auto output = this->encoder->Encode(filenameC);
+		auto output = encoder->Encode(filenameC);
 		return CreateManagedBuffer(output);
 	}
 	catch (std::exception& exception)

@@ -9,16 +9,16 @@ using namespace System;
 
 SuperCompressed::BasisUniversal::Transcoder::Transcoder()
 {
-	this->transcoder = new NativeTranscoder();
-	this->transcoder->Init();
+	transcoder = new NativeTranscoder();
+	transcoder->Init();
 }
 
 SuperCompressed::BasisUniversal::Transcoder::~Transcoder()
 {
-	if (this->transcoder != nullptr)
+	if (transcoder != nullptr)
 	{
-		delete this->transcoder;
-		this->transcoder = nullptr;
+		delete transcoder;
+		transcoder = nullptr;
 	}
 }
 
@@ -32,7 +32,7 @@ array<Byte>^ SuperCompressed::BasisUniversal::Transcoder::Transcode(array<uint8_
 
 		basisu::vector<uint8_t> file;
 		file.append(pData, data->Length);
-		auto output = this->transcoder->Transcode(file, nameC);
+		auto output = transcoder->Transcode(file, nameC);
 		
 		return CreateManagedBuffer(output);
 	}
