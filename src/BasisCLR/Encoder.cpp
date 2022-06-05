@@ -23,6 +23,38 @@ SuperCompressed::BasisUniversal::Encoder::~Encoder()
 	}
 }
 
+array<System::Byte>^ SuperCompressed::BasisUniversal::Encoder::EncodeEtc1s(array<uint8_t>^ data, uint32_t width, uint32_t height, System::Nullable<int> quality, System::Nullable<bool> perceptual, System::Nullable<bool> generateMipmaps, System::Nullable<bool> renormalize)
+{
+	if (!quality.HasValue) { quality = 128; }
+	if (!perceptual.HasValue) { perceptual = true; }
+	if (!generateMipmaps.HasValue) { generateMipmaps= false; }
+	if (!renormalize.HasValue) { renormalize = false; }
+
+	if (quality.Value < 0 || quality.Value > 255)
+	{
+		throw gcnew System::ArgumentOutOfRangeException("quality", quality.Value, "quality should be in [0..255]");
+	}
+	
+	throw gcnew System::NotImplementedException();
+	return gcnew array<Byte>(0);
+}
+
+array<System::Byte>^ SuperCompressed::BasisUniversal::Encoder::EncodeUastc(array<uint8_t>^ data, uint32_t width, uint32_t height, System::Nullable<int> level, System::Nullable<bool> perceptual, System::Nullable<bool> generateMipmaps, System::Nullable<bool> renormalize)
+{
+	if (!level.HasValue) { level = 3; }
+	if (!perceptual.HasValue) { perceptual = true; }
+	if (!generateMipmaps.HasValue) { generateMipmaps = false; }
+	if (!renormalize.HasValue) { renormalize = false; }
+
+	if (level.Value < 0 || level.Value > 4)
+	{
+		throw gcnew System::ArgumentOutOfRangeException("level", level.Value, "level should be in [0..4]");
+	}
+
+	throw gcnew System::NotImplementedException();
+	return gcnew array<Byte>(0);
+}
+
 array<Byte>^ SuperCompressed::BasisUniversal::Encoder::Encode(array<uint8_t>^ data, uint32_t width, uint32_t height, String^ name)
 {
 	auto nameC = msclr::interop::marshal_as<std::string>(name);
