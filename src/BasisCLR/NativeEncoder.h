@@ -13,14 +13,6 @@ class NativeEncoder
 {
 public:
 	void Init();
-
-	const basisu::uint8_vec Encode(const std::string& filename);
-	const basisu::uint8_vec Encode(uint8_t* data, uint32_t width, uint32_t height, const std::string& name);
-
+	const basisu::uint8_vec Encode(const std::string& filename, bool uastc, int quality_level, bool perceptual, bool generateMipMaps, bool renormalize);
 	void Deinit();
-
-private:
-	const basisu::uint8_vec Encode(const basisu::image& image, const std::string& name);
-		
-	
 };

@@ -6,45 +6,42 @@ using static Xunit.Assert;
 
 namespace BasisCLR.Tests
 {
-    public class BasisEncoderTests
+    public sealed class BasisEncoderTests : IDisposable
     {
-        [Fact]
-        public void CreateAndDestroy()
-        {
-            using var encoder = new Encoder();
-            encoder.Dispose();
-        }
+        private readonly Encoder Encoder;
+        private readonly Transcoder Transcoder;
 
+        public BasisEncoderTests()
+        {
+            this.Encoder = new Encoder();
+            this.Transcoder = new Transcoder();
+        }
 
         [Fact]
         public void WrongFilename()
-        {
-            using var encoder = new Encoder();
-
-            Throws<Exception>(() => encoder.Encode("C:/this_file_does_not_exist.tga"));
+        {        
+            Throws<Exception>(() => this.Encoder.EncodeEtc1s("C:/this_file_does_not_exist.tga"));
+            Throws<Exception>(() => this.Encoder.EncodeUastc("C:/this_file_does_not_exist.tga"));
         }
 
         [Fact]
-        public void Encode()
+        public void EncodeEtc1s()
         {
             string filename = GetTestFilename();            
-            using var encoder = new Encoder();
-            var bytes = encoder.Encode(filename);
+            var bytes = this.Encoder.EncodeEtc1s(filename);
 
             True(bytes.Length > 0);
-        }       
+        }
 
         [Fact]
-        public void Transcode()
+        public void TranscodeEtc1s()
         {
             string filename = GetTestFilename();
-            using var encoder = new Encoder();
-            var encodedBytes = encoder.Encode(filename);
+            var encodedBytes = this.Encoder.EncodeEtc1s(filename);
 
             True(encodedBytes.Length > 0);
 
-            using var transcoder = new Transcoder();
-            var transcodedBytes = transcoder.Transcode(encodedBytes, filename);
+            var transcodedBytes = this.Transcoder.Transcode(encodedBytes, filename);
 
             True(transcodedBytes.Length > 0);
             True(transcodedBytes.Length >= encodedBytes.Length);
@@ -60,5 +57,10 @@ namespace BasisCLR.Tests
             return filename;
         }
 
+        public void Dispose()
+        {
+            this.Encoder.Dispose();
+            this.Transcoder.Dispose();
+        }
     }
 }

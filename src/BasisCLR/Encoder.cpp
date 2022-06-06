@@ -23,8 +23,10 @@ SuperCompressed::BasisUniversal::Encoder::~Encoder()
 	}
 }
 
-array<System::Byte>^ SuperCompressed::BasisUniversal::Encoder::EncodeEtc1s(array<uint8_t>^ data, uint32_t width, uint32_t height, System::Nullable<int> quality, System::Nullable<bool> perceptual, System::Nullable<bool> generateMipmaps, System::Nullable<bool> renormalize)
+array<System::Byte>^ SuperCompressed::BasisUniversal::Encoder::EncodeEtc1s(System::String^ filename, System::Nullable<int> quality, System::Nullable<bool> perceptual, System::Nullable<bool> generateMipmaps, System::Nullable<bool> renormalize)
 {
+	assert(encoder != nullptr);
+	
 	if (!quality.HasValue) { quality = 128; }
 	if (!perceptual.HasValue) { perceptual = true; }
 	if (!generateMipmaps.HasValue) { generateMipmaps= false; }
@@ -34,13 +36,25 @@ array<System::Byte>^ SuperCompressed::BasisUniversal::Encoder::EncodeEtc1s(array
 	{
 		throw gcnew System::ArgumentOutOfRangeException("quality", quality.Value, "quality should be in [0..255]");
 	}
-	
-	throw gcnew System::NotImplementedException();
-	return gcnew array<Byte>(0);
+		
+	auto filenameC = msclr::interop::marshal_as<std::string>(filename);
+
+	try
+	{
+		auto output = encoder->Encode(filenameC, false, quality.Value, perceptual.Value, generateMipmaps.Value, renormalize.Value);
+		return CreateManagedBuffer(output);
+	}
+	catch (std::exception& exception)
+	{
+		auto message = gcnew String(exception.what());
+		throw gcnew Exception(message);
+	}
 }
 
-array<System::Byte>^ SuperCompressed::BasisUniversal::Encoder::EncodeUastc(array<uint8_t>^ data, uint32_t width, uint32_t height, System::Nullable<int> level, System::Nullable<bool> perceptual, System::Nullable<bool> generateMipmaps, System::Nullable<bool> renormalize)
+array<System::Byte>^ SuperCompressed::BasisUniversal::Encoder::EncodeUastc(System::String^ filename, System::Nullable<int> level, System::Nullable<bool> perceptual, System::Nullable<bool> generateMipmaps, System::Nullable<bool> renormalize)
 {
+	assert(encoder != nullptr);
+
 	if (!level.HasValue) { level = 3; }
 	if (!perceptual.HasValue) { perceptual = true; }
 	if (!generateMipmaps.HasValue) { generateMipmaps = false; }
@@ -51,48 +65,18 @@ array<System::Byte>^ SuperCompressed::BasisUniversal::Encoder::EncodeUastc(array
 		throw gcnew System::ArgumentOutOfRangeException("level", level.Value, "level should be in [0..4]");
 	}
 
-	throw gcnew System::NotImplementedException();
-	return gcnew array<Byte>(0);
-}
-
-array<Byte>^ SuperCompressed::BasisUniversal::Encoder::Encode(array<uint8_t>^ data, uint32_t width, uint32_t height, String^ name)
-{
-	auto nameC = msclr::interop::marshal_as<std::string>(name);
-
-	try
-	{
-		auto size = sizeof(uint8_t) * data->Length;		
-		uint8_t *pImage = (uint8_t *)malloc(size);		
-		pin_ptr<uint8_t> pData = &data[0];
-		
-		memcpy_s(pImage, size, pData, size);
-		
-		auto output = encoder->Encode(pImage, width, height, nameC);
-		return CreateManagedBuffer(output);
-	}
-	catch (std::exception& exception)
-	{
-		auto message = gcnew String(exception.what());
-		throw gcnew Exception(message);
-	}
-}
-
-array<Byte>^ SuperCompressed::BasisUniversal::Encoder::Encode(String^ filename)
-{
-	assert(encoder != nullptr);
-
 	auto filenameC = msclr::interop::marshal_as<std::string>(filename);
 
 	try
-	{		
-		auto output = encoder->Encode(filenameC);
+	{
+		auto output = encoder->Encode(filenameC, true, level.Value, perceptual.Value, generateMipmaps.Value, renormalize.Value);
 		return CreateManagedBuffer(output);
 	}
 	catch (std::exception& exception)
 	{
 		auto message = gcnew String(exception.what());
 		throw gcnew Exception(message);
-	}	
+	}
 }
 
 inline array<Byte>^ SuperCompressed::BasisUniversal::Encoder::CreateManagedBuffer(basisu::uint8_vec output)
