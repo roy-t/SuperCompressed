@@ -19,7 +19,7 @@ namespace SuperCompressed
 
 			array<System::Byte>^ Transcode(array<uint8_t>^ data, System::String^ name);
 		private:
-			array<System::Byte>^ CreateManagedBuffer(basisu::uint8_vec output);
+			array<System::Byte>^ ConvertToManagedBuffer(basisu::uint8_vec output);
 		};
 	}
 }

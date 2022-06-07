@@ -30,7 +30,7 @@ namespace SuperCompressed
 				[System::Runtime::InteropServices::OptionalAttribute] System::Nullable<bool> renormalize);
 
 		private:
-			array<System::Byte>^ CreateManagedBuffer(basisu::uint8_vec output);
+			array<System::Byte>^ ConvertToManagedBuffer(basisu::uint8_vec output);
 		};		
 	}
 }

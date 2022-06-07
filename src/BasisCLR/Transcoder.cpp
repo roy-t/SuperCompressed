@@ -34,7 +34,7 @@ array<Byte>^ SuperCompressed::BasisUniversal::Transcoder::Transcode(array<uint8_
 		file.append(pData, data->Length);
 		auto output = transcoder->Transcode(file, nameC);
 		
-		return CreateManagedBuffer(output);
+		return ConvertToManagedBuffer(output);
 	}
 	catch (std::exception& exception)
 	{
@@ -43,11 +43,13 @@ array<Byte>^ SuperCompressed::BasisUniversal::Transcoder::Transcode(array<uint8_
 	}
 }
 
-inline array<Byte>^ SuperCompressed::BasisUniversal::Transcoder::CreateManagedBuffer(basisu::uint8_vec output)
+inline array<Byte>^ SuperCompressed::BasisUniversal::Transcoder::ConvertToManagedBuffer(basisu::uint8_vec output)
 {
 	auto buffer = gcnew array<Byte>((int)output.size());
 	pin_ptr<Byte> bufferStart = &buffer[0];
 	memcpy_s(bufferStart, buffer->Length, &output[0], output.size());
+
+	output.clear();
 
 	return buffer;
 }

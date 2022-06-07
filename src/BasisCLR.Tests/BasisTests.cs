@@ -6,12 +6,12 @@ using static Xunit.Assert;
 
 namespace BasisCLR.Tests
 {
-    public sealed class BasisEncoderTests : IDisposable
+    public sealed class BasisTests : IDisposable
     {
         private readonly Encoder Encoder;
         private readonly Transcoder Transcoder;
 
-        public BasisEncoderTests()
+        public BasisTests()
         {
             this.Encoder = new Encoder();
             this.Transcoder = new Transcoder();
