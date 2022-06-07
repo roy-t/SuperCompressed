@@ -12,11 +12,68 @@ void NativeTranscoder::Init()
 	basisu_transcoder_init();
 }
 
-basisu::vector<uint8_t> NativeTranscoder::Transcode(basisu::vector<uint8_t> file, int32_t& width, int32_t& height, int32_t& pitch)
+uint32_t NativeTranscoder::GetImageCount(basisu::vector<uint8_t> file)
 {
 	const transcoder_texture_format format = transcoder_texture_format::cTFBC7_RGBA;
-	const uint32_t imageIndex = 0;
-	const uint32_t levelIndex = 0;
+	const uint32_t flags = 0;
+
+	basisu_transcoder transcoder{};
+
+	if (!transcoder.validate_header(file.data(), file.size()))
+	{
+		std::string error = fmt::format("Header validation failed");
+		throw std::exception(error.c_str());
+	}
+
+	basisu_file_info info;
+	if (!transcoder.get_file_info(file.data(), file.size(), info))
+	{
+		std::string error = fmt::format("Loading file info failed");
+		throw std::exception(error.c_str());
+	}
+
+	return info.m_total_images;
+}
+
+uint32_t NativeTranscoder::GetMipMapCount(basisu::vector<uint8_t> file, uint32_t imageIndex)
+{
+	const transcoder_texture_format format = transcoder_texture_format::cTFBC7_RGBA;
+	const uint32_t flags = 0;
+
+	basisu_transcoder transcoder{};
+
+	if (!transcoder.validate_header(file.data(), file.size()))
+	{
+		std::string error = fmt::format("Header validation failed");
+		throw std::exception(error.c_str());
+	}
+
+	basisu_file_info info;
+	if (!transcoder.get_file_info(file.data(), file.size(), info))
+	{
+		std::string error = fmt::format("Loading file info failed");
+		throw std::exception(error.c_str());
+	}
+
+	if (imageIndex >= info.m_total_images)
+	{
+		std::string error = fmt::format("Image index out of range {}/{}", imageIndex, info.m_total_images);
+		throw std::exception(error.c_str());
+	}
+
+	basisu_image_info image;
+	if (!transcoder.get_image_info(file.data(), file.size(), image, imageIndex))
+	{
+		std::string error = fmt::format("Loading image info failed for index {}", imageIndex);
+		throw std::exception(error.c_str());
+	}
+
+	return image.m_total_levels;
+}
+
+basisu::vector<uint8_t> NativeTranscoder::Transcode(basisu::vector<uint8_t> file, uint32_t imageIndex, uint32_t levelIndex, int32_t& width, int32_t& height, int32_t& pitch)
+{
+	const transcoder_texture_format format = transcoder_texture_format::cTFBC7_RGBA;
 	const uint32_t flags = 0;
 
 	basisu_transcoder transcoder{};

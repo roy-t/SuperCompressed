@@ -22,7 +22,41 @@ SuperCompressed::BasisUniversal::Transcoder::~Transcoder()
 	}
 }
 
-array<Byte>^ SuperCompressed::BasisUniversal::Transcoder::Transcode(array<uint8_t>^ data, int32_t% width, int32_t% height, int32_t% pitch)
+int32_t SuperCompressed::BasisUniversal::Transcoder::GetImageCount(array<uint8_t>^ data)
+{
+	try
+	{
+		pin_ptr<uint8_t> pData = &data[0];
+
+		basisu::vector<uint8_t> file;
+		file.append(pData, data->Length);
+		return transcoder->GetImageCount(file);
+	}
+	catch (std::exception& exception)
+	{
+		auto message = gcnew String(exception.what());
+		throw gcnew Exception(message);
+	}
+}
+
+int32_t SuperCompressed::BasisUniversal::Transcoder::GetMipMapCount(array<uint8_t>^ data, int32_t image)
+{
+	try
+	{
+		pin_ptr<uint8_t> pData = &data[0];
+
+		basisu::vector<uint8_t> file;
+		file.append(pData, data->Length);
+		return transcoder->GetMipMapCount(file, image);
+	}
+	catch (std::exception& exception)
+	{
+		auto message = gcnew String(exception.what());
+		throw gcnew Exception(message);
+	}
+}
+
+array<Byte>^ SuperCompressed::BasisUniversal::Transcoder::Transcode(array<uint8_t>^ data, int32_t image, int32_t mipmap, int32_t% width, int32_t% height, int32_t% pitch)
 {	
 	try
 	{
@@ -34,7 +68,7 @@ array<Byte>^ SuperCompressed::BasisUniversal::Transcoder::Transcode(array<uint8_
 		int32_t cWidth = 0;
 		int32_t cHeigth = 0;
 		int32_t cPitch = 0;
-		auto output = transcoder->Transcode(file, cWidth, cHeigth, cPitch);
+		auto output = transcoder->Transcode(file, image, mipmap, cWidth, cHeigth, cPitch);
 		
 		width = cWidth;
 		height = cHeigth;

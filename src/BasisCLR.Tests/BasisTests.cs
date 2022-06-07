@@ -37,11 +37,17 @@ namespace BasisCLR.Tests
         public void TranscodeEtc1s()
         {
             string filename = GetTestFilename();
-            var encodedBytes = this.Encoder.EncodeEtc1s(filename);
+            var encodedBytes = this.Encoder.EncodeEtc1s(filename, generateMipmaps: true);
 
             True(encodedBytes.Length > 0);
 
-            var transcodedBytes = this.Transcoder.Transcode(encodedBytes, out var width, out var height, out var pitch);
+            var imageCount = this.Transcoder.GetImageCount(encodedBytes);
+            True(imageCount == 1);            
+
+            var mipmapCount = this.Transcoder.GetMipMapCount(encodedBytes, 0);
+            True(mipmapCount == 8);
+
+            var transcodedBytes = this.Transcoder.Transcode(encodedBytes, 0, 0, out var width, out var height, out var pitch);
 
             True(transcodedBytes.Length > 0);
             True(transcodedBytes.Length >= encodedBytes.Length);
