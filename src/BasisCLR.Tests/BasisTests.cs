@@ -6,12 +6,12 @@ using static Xunit.Assert;
 
 namespace BasisCLR.Tests
 {
-    public sealed class BasisEncoderTests : IDisposable
+    public sealed class BasisTests : IDisposable
     {
         private readonly Encoder Encoder;
         private readonly Transcoder Transcoder;
 
-        public BasisEncoderTests()
+        public BasisTests()
         {
             this.Encoder = new Encoder();
             this.Transcoder = new Transcoder();
@@ -41,7 +41,7 @@ namespace BasisCLR.Tests
 
             True(encodedBytes.Length > 0);
 
-            var transcodedBytes = this.Transcoder.Transcode(encodedBytes, filename);
+            var transcodedBytes = this.Transcoder.Transcode(encodedBytes, out var width, out var height, out var pitch);
 
             True(transcodedBytes.Length > 0);
             True(transcodedBytes.Length >= encodedBytes.Length);

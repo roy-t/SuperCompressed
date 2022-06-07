@@ -42,7 +42,7 @@ array<System::Byte>^ SuperCompressed::BasisUniversal::Encoder::EncodeEtc1s(Syste
 	try
 	{
 		auto output = encoder->Encode(filenameC, false, quality.Value, perceptual.Value, generateMipmaps.Value, renormalize.Value);
-		return CreateManagedBuffer(output);
+		return ConvertToManagedBuffer(output);
 	}
 	catch (std::exception& exception)
 	{
@@ -70,7 +70,7 @@ array<System::Byte>^ SuperCompressed::BasisUniversal::Encoder::EncodeUastc(Syste
 	try
 	{
 		auto output = encoder->Encode(filenameC, true, level.Value, perceptual.Value, generateMipmaps.Value, renormalize.Value);
-		return CreateManagedBuffer(output);
+		return ConvertToManagedBuffer(output);
 	}
 	catch (std::exception& exception)
 	{
@@ -79,11 +79,13 @@ array<System::Byte>^ SuperCompressed::BasisUniversal::Encoder::EncodeUastc(Syste
 	}
 }
 
-inline array<Byte>^ SuperCompressed::BasisUniversal::Encoder::CreateManagedBuffer(basisu::uint8_vec output)
+inline array<Byte>^ SuperCompressed::BasisUniversal::Encoder::ConvertToManagedBuffer(basisu::uint8_vec output)
 {
 	auto buffer = gcnew array<Byte>((int)output.size());
 	pin_ptr<Byte> bufferStart = &buffer[0];
 	memcpy_s(bufferStart, buffer->Length, &output[0], output.size());
+
+	output.clear();
 
 	return buffer;
 }

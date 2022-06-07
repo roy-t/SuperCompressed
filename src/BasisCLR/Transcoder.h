@@ -22,7 +22,7 @@ namespace SuperCompressed
 				[System::Runtime::InteropServices::OutAttribute] int32_t% height,
 				[System::Runtime::InteropServices::OutAttribute] int32_t% pitch);
 		private:
-			array<System::Byte>^ CreateManagedBuffer(basisu::uint8_vec output);
+			array<System::Byte>^ ConvertToManagedBuffer(basisu::uint8_vec output);
 		};
 	}
 }
