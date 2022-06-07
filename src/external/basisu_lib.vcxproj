@@ -42,17 +42,17 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)out\bin\$(Configuration)-$(Platform)\</OutDir>
+    <OutDir>$(ProjectDir)..\..\out\bin\$(Configuration)-$(Platform)\</OutDir>
     <IncludePath>$(MSBuildProjectDirectory)\basis_universal;$(IncludePath)</IncludePath>
     <SourcePath>$(MSBuildProjectDirectory)\basis_universal;$(SourcePath)</SourcePath>
-    <IntDir>$(SolutionDir)out\obj\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>$(ProjectDir)..\..\out\obj\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)out\bin\$(Configuration)-$(Platform)\</OutDir>
+    <OutDir>$(ProjectDir)..\..\out\bin\$(Configuration)-$(Platform)\</OutDir>
     <TargetName>$(ProjectName)D</TargetName>
     <IncludePath>$(MSBuildProjectDirectory)\basis_universal;$(IncludePath)</IncludePath>
     <SourcePath>$(MSBuildProjectDirectory)\basis_universal;$(SourcePath)</SourcePath>
-    <IntDir>$(SolutionDir)out\obj\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <IntDir>$(ProjectDir)..\..\out\obj\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

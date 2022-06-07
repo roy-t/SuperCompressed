@@ -46,16 +46,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)src\external\basis_universal\OpenCL;$(SolutionDir)src\external\basis_universal\encoder;$(SolutionDir)src\external\basis_universal\transcoder;$(SolutionDir)src\external\fmt\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\external\basis_universal\OpenCL;$(ProjectDir)..\external\basis_universal\encoder;$(ProjectDir)..\external\basis_universal\transcoder;$(ProjectDir)..\external\fmt\include;$(IncludePath)</IncludePath>
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)out\bin\$(Configuration)-$(Platform)\</OutDir>
-    <IntDir>$(SolutionDir)out\obj\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(ProjectDir)..\..\out\bin\$(Configuration)-$(Platform)\</OutDir>
+    <IntDir>$(ProjectDir)..\..\out\obj\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)src\external\basis_universal\OpenCL;$(SolutionDir)src\external\basis_universal\encoder;$(SolutionDir)src\external\basis_universal\transcoder;$(SolutionDir)src\external\fmt\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\external\basis_universal\OpenCL;$(ProjectDir)..\external\basis_universal\encoder;$(ProjectDir)..\external\basis_universal\transcoder;$(ProjectDir)..\external\fmt\include;$(IncludePath)</IncludePath>
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)out\bin\$(Configuration)-$(Platform)\</OutDir>
-    <IntDir>$(SolutionDir)out\obj\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(ProjectDir)..\..\out\bin\$(Configuration)-$(Platform)\</OutDir>
+    <IntDir>$(ProjectDir)..\..\out\obj\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -68,7 +68,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>opencl64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)src\external\basis_universal\OpenCL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\external\basis_universal\OpenCL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -82,7 +82,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>opencl64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)src\external\basis_universal\OpenCL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\external\basis_universal\OpenCL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
