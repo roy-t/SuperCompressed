@@ -12,7 +12,7 @@ void NativeTranscoder::Init()
 	basisu_transcoder_init();
 }
 
-basisu::vector<uint8_t> NativeTranscoder::Transcode(basisu::vector<uint8_t> file, std::string name)
+basisu::vector<uint8_t> NativeTranscoder::Transcode(basisu::vector<uint8_t> file, int32_t& width, int32_t& height, int32_t& pitch)
 {
 	const transcoder_texture_format format = transcoder_texture_format::cTFBC7_RGBA;
 	const uint32_t imageIndex = 0;
@@ -23,14 +23,14 @@ basisu::vector<uint8_t> NativeTranscoder::Transcode(basisu::vector<uint8_t> file
 
 	if (!transcoder.validate_header(file.data(), file.size()))
 	{
-		std::string error = fmt::format("Header validation failed for {}.", name);
+		std::string error = fmt::format("Header validation failed");
 		throw std::exception(error.c_str());
 	}
 
 	basisu_file_info info;
 	if (!transcoder.get_file_info(file.data(), file.size(), info))
 	{
-		std::string error = fmt::format("Loading file info failed for {}.", name);
+		std::string error = fmt::format("Loading file info failed");
 		throw std::exception(error.c_str());
 	}
 	
@@ -38,17 +38,16 @@ basisu::vector<uint8_t> NativeTranscoder::Transcode(basisu::vector<uint8_t> file
 	basisu_image_info image;
 	if (!transcoder.get_image_info(file.data(), file.size(), image, imageIndex))
 	{
-		std::string error = fmt::format("Loading image info failed for {}:{}", name, imageIndex);
+		std::string error = fmt::format("Loading image info failed for index {}", imageIndex);
 		throw std::exception(error.c_str());
 	}
 
 	uint32_t origWidth, origHeight, totalBlocks;
 	if (!transcoder.get_image_level_desc(file.data(), file.size(), imageIndex, levelIndex, origWidth, origHeight, totalBlocks))
 	{
-		std::string error = fmt::format("Loading image level info failed for {}:{}:{}", name, imageIndex, levelIndex);
+		std::string error = fmt::format("Loading image level info failed level {}:{}", imageIndex, levelIndex);
 		throw std::exception(error.c_str());
 	}
-
 	
 	basisu::vector<uint8_t> output;
 
@@ -56,11 +55,16 @@ basisu::vector<uint8_t> NativeTranscoder::Transcode(basisu::vector<uint8_t> file
 	
 	uint32_t status;
 
+	width = origWidth;
+	height = origHeight;
+
 	if (basis_transcoder_format_is_uncompressed(format))
 	{
 		const uint32_t bytesPerPixel = basis_get_uncompressed_bytes_per_pixel(format);
 		const uint32_t bytesPerLine = origWidth * bytesPerPixel;
 		const uint32_t bytesPerSlice = bytesPerLine * origHeight;
+
+		pitch = bytesPerLine;
 
 		output.resize(bytesPerSlice);
 
@@ -79,9 +83,13 @@ basisu::vector<uint8_t> NativeTranscoder::Transcode(basisu::vector<uint8_t> file
 	}
 	else
 	{
-		uint32_t bytesPerBlock = basis_get_bytes_per_block_or_pixel(format);
+		const uint32_t bytesPerBlock = basis_get_bytes_per_block_or_pixel(format);
+		const uint32_t blockWidth = basis_get_block_width(format);
+		const uint32_t blocksPerLine = origWidth / blockWidth;
 		uint32_t requiredSize = totalBlocks * bytesPerBlock;
 		
+		pitch = bytesPerBlock * blocksPerLine;
+
 		// Add required extra padding for this format
 		if (format == transcoder_texture_format::cTFPVRTC1_4_RGB
 			|| format == transcoder_texture_format::cTFPVRTC1_4_RGBA)
@@ -107,7 +115,7 @@ basisu::vector<uint8_t> NativeTranscoder::Transcode(basisu::vector<uint8_t> file
 
 	if (!status)
 	{
-		std::string error = fmt::format("Transcoding failed for {}:{}:{}", name, imageIndex, levelIndex);
+		std::string error = fmt::format("Transcoding failed for {}:{}", imageIndex, levelIndex);
 		throw std::exception(error.c_str());
 	}
 	

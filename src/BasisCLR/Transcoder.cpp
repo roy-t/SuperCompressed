@@ -22,18 +22,24 @@ SuperCompressed::BasisUniversal::Transcoder::~Transcoder()
 	}
 }
 
-array<Byte>^ SuperCompressed::BasisUniversal::Transcoder::Transcode(array<uint8_t>^ data, String^ name)
+array<Byte>^ SuperCompressed::BasisUniversal::Transcoder::Transcode(array<uint8_t>^ data, int32_t% width, int32_t% height, int32_t% pitch)
 {	
-	auto nameC = msclr::interop::marshal_as < std::string>(name);
-
 	try
 	{
 		pin_ptr<uint8_t> pData = &data[0];
 
 		basisu::vector<uint8_t> file;
 		file.append(pData, data->Length);
-		auto output = transcoder->Transcode(file, nameC);
+
+		int32_t cWidth = 0;
+		int32_t cHeigth = 0;
+		int32_t cPitch = 0;
+		auto output = transcoder->Transcode(file, cWidth, cHeigth, cPitch);
 		
+		width = cWidth;
+		height = cHeigth;
+		pitch = cPitch;
+
 		return CreateManagedBuffer(output);
 	}
 	catch (std::exception& exception)

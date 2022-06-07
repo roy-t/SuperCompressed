@@ -17,7 +17,10 @@ namespace SuperCompressed
 			Transcoder();
 			~Transcoder();
 
-			array<System::Byte>^ Transcode(array<uint8_t>^ data, System::String^ name);
+			array<System::Byte>^ Transcode(array<uint8_t>^ data,
+				[System::Runtime::InteropServices::OutAttribute] int32_t% width,
+				[System::Runtime::InteropServices::OutAttribute] int32_t% height,
+				[System::Runtime::InteropServices::OutAttribute] int32_t% pitch);
 		private:
 			array<System::Byte>^ CreateManagedBuffer(basisu::uint8_vec output);
 		};
