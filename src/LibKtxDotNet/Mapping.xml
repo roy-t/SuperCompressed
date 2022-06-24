@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--https://sharpgentools.readthedocs.io/en/latest/getting-started.html-->
+<config id="LibKtxMapping" xmlns="urn:SharpGen.Config">
+    <assembly>ktx</assembly>
+    <namespace>LibKtxDotNet.Generated</namespace>
+    <depends>SharpGen.Runtime</depends>
+
+	<sdk name="StdLib" />
+	<sdk name="WindowsSdk" version="10.0.19041.0" />	
+	<include-dir override="true">$(THIS_CONFIG_PATH)/../external/KTX-Software/include</include-dir>
+	
+	<!--<include file="../lib/formatsize.h" namespace="LibKtxDotNet.Generated" output="Generated">
+		<attach>ktxFormatSize</attach>
+	</include>
+		
+	<include file="../lib/texture.h" namespace="LibKtxDotNet.Generated" output="Generated">
+		<attach>ktxTexture_protected</attach>
+		<attach>ktxTexture_vtblInt</attach>
+	</include>
+		
+	<include file="ktx.h" namespace="LibKtxDotNet.Generated" output="Generated">
+		<attach>ktx_error_code_e</attach>
+		<attach>ktxTextureCreateFlagBits</attach>
+		<attach>class_id</attach>
+		<attach>ktxTexture</attach>		
+		<attach>ktxTexture_vtbl</attach>		
+		<attach>ktxTexture_CreateFromNamedFile</attach>
+		<attach>ktxStream</attach>
+	</include>-->		
+	
+	<include file="ktx.h" namespace="LibKtxDotNet.Generated" output="Generated">
+		<attach>ktx_error_code_e</attach>
+		<attach>ktxTextureCreateFlagBits</attach>
+		<attach>ktxTexture_CreateFromNamedFile</attach>
+	</include>
+	
+	<extension>
+		<create class="Functions" visibility="public static" />		
+		<!--<define struct="LibKtxDotNet.Predefined.ktxTexture_vvtbl" sizeof="8" />-->		
+	</extension>
+
+	
+	<bindings>
+		<!--<bind from="ktxTexture_vvtbl" to="LibKtxDotNet.Predefined.ktxTexture_vvtbl" />-->
+		<bind from="ktxTexture" to="System.IntPtr" />
+	</bindings>
+
+	<mapping>		
+		<map function="ktxTexture_CreateFromNamedFile" group="LibKtxDotNet.Generated.Functions" />
+	</mapping>
+</config>

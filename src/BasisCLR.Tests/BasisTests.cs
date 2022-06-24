@@ -1,3 +1,4 @@
+using LibKtxDotNet;
 using SuperCompressed.BasisUniversal;
 using System;
 using System.IO;
@@ -6,6 +7,32 @@ using static Xunit.Assert;
 
 namespace BasisCLR.Tests
 {
+    public static class TestUtilities
+    {
+        public static string GetTestFilename()
+        {
+            var cwd = Directory.GetCurrentDirectory();
+            var filename = Path.GetFullPath(Path.Combine(cwd, "../../../../image_with_alpha.tga"));
+
+            True(File.Exists(filename));
+
+            return filename;
+        }
+    }
+
+    public sealed class KtxTexts
+    {
+        [Fact]
+        public void Should()
+        {
+            string filename = TestUtilities.GetTestFilename();
+            var value = NativeMethods.ktxTexture_CreateFromNamedFile(filename, ktxTextureCreateFlagBits.KTX_TEXTURE_CREATE_LOAD_IMAGE_DATA_BIT, out var ptrTo);
+
+            True(value == ktx_error_code_e.KTX_SUCCESS);
+            True(ptrTo != IntPtr.Zero);
+        }
+    }
+
     public sealed class BasisTests : IDisposable
     {
         private readonly Encoder Encoder;
@@ -27,7 +54,7 @@ namespace BasisCLR.Tests
         [Fact]
         public void EncodeEtc1s()
         {
-            string filename = GetTestFilename();            
+            string filename = TestUtilities.GetTestFilename();            
             var bytes = this.Encoder.EncodeEtc1s(filename);
 
             True(bytes.Length > 0);
@@ -36,7 +63,7 @@ namespace BasisCLR.Tests
         [Fact]
         public void TranscodeEtc1s()
         {
-            string filename = GetTestFilename();
+            string filename = TestUtilities.GetTestFilename();
             var encodedBytes = this.Encoder.EncodeEtc1s(filename, generateMipmaps: true);
 
             True(encodedBytes.Length > 0);
@@ -51,17 +78,7 @@ namespace BasisCLR.Tests
 
             True(transcodedBytes.Length > 0);
             True(transcodedBytes.Length >= encodedBytes.Length);
-        }
-
-        private static string GetTestFilename()
-        {
-            var cwd = Directory.GetCurrentDirectory();
-            var filename = Path.GetFullPath(Path.Combine(cwd, "../../../../image_with_alpha.tga"));
-            
-            True(File.Exists(filename));
-
-            return filename;
-        }
+        }        
 
         public void Dispose()
         {

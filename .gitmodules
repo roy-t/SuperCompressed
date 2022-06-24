@@ -4,3 +4,6 @@
 [submodule "external/fmt"]
 	path = src/external/fmt
 	url = https://github.com/fmtlib/fmt.git
+[submodule "src/external/KTX-Software"]
+	path = src/external/KTX-Software
+	url = https://github.com/KhronosGroup/KTX-Software.git
