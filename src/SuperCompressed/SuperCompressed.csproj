@@ -1,18 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <Sdk Name="SharpGenTools.Sdk" Version="2.0.0-beta.11" />
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>$(ProjectDir)..\..\out\bin\$(Configuration)-$(Platform)\</OutputPath>
+    <IntermediateOutputPath>$(ProjectDir)..\..\out\obj\$(Configuration)-$(Platform)\</IntermediateOutputPath>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
-
   <ItemGroup>
-    <SharpGenMapping Include="Mappings.xml" />  
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="SharpGen.Runtime.COM" Version="2.0.0-beta.11" />
+    <ProjectReference Include="..\SuperCompressed.Native\SuperCompressed.Native.vcxproj" />
   </ItemGroup>
 </Project>

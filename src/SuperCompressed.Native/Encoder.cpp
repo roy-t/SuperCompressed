@@ -3,10 +3,7 @@
 
 #include <basisu.h>
 
-void Encoder::Ten()
+int FortyTwo()
 {
-}
-
-void Fourteen()
-{
+	return 42;
 }

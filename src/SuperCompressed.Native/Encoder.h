@@ -1,11 +1,6 @@
 #pragma once
-//#include <string>
 
-void Fourteen();
-
-class Encoder
+extern "C"
 {
-public:
-	void Ten();
-};
-
+    __declspec(dllexport) int FortyTwo();
+}
