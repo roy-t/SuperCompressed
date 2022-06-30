@@ -7,6 +7,7 @@
     <OutputPath>$(ProjectDir)..\..\out\bin\$(Configuration)-$(Platform)\</OutputPath>
     <IntermediateOutputPath>$(ProjectDir)..\..\out\obj\$(Configuration)-$(Platform)\</IntermediateOutputPath>
     <Platforms>x64</Platforms>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\SuperCompressed.Native\SuperCompressed.Native.vcxproj" />

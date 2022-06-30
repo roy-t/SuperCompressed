@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BasisCLR\BasisCLR.vcxproj" />
-    <ProjectReference Include="..\LibKtxDotNet\LibKtxDotNet.csproj" />
   </ItemGroup>
 
 </Project>
