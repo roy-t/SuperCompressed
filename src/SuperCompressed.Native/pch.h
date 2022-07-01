@@ -11,6 +11,9 @@
 // Windows Header Files
 #include <windows.h>
 
+// C/C++ libraries
+#include <memory>
+
 // Basis Universal header files
 #include <basisu_comp.h>
 #include <basisu_enc.h>
