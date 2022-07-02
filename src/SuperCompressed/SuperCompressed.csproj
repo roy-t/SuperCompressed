@@ -10,6 +10,9 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="StbImageSharp" Version="2.27.11" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\SuperCompressed.Native\SuperCompressed.Native.vcxproj" />
   </ItemGroup>
 </Project>
