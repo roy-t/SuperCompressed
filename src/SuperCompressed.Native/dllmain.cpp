@@ -9,11 +9,10 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     switch (ul_reason_for_call)
     {
     case DLL_PROCESS_ATTACH:
-        basisu::basisu_encoder_init();
+
     case DLL_THREAD_ATTACH:
     case DLL_THREAD_DETACH:
-    case DLL_PROCESS_DETACH:
-        basisu::basisu_encoder_deinit();
+    case DLL_PROCESS_DETACH:        
         break;
     }
     return TRUE;

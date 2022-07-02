@@ -7,15 +7,10 @@ namespace SuperCompressed.Tests
         [Fact]
         public void CanLoadFortyTwo()
         {
-            using (var texture = new Texture(new byte[100], 128, 64, 256))
-            {
-                var ft = SuperCompressed.CoolMethods.Encode(texture, Mode.SRgb, MipMapGeneration.Full, Quality.Slower);
-                Equal(128, ft.Stride);
-                Equal(64, ft.Width);
-                Equal(256, ft.Height);
-            }
+            var uncompressed = new Texture(new byte[4 * 32 * 32], 4, 32, 32);            
+            var compressed = CoolMethods.Encode(uncompressed, Mode.SRgb, MipMapGeneration.Full, Quality.Slower);
 
-            Console.WriteLine("Hello World!");
+            True(compressed.Data.Length > 0);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Buffers;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace SuperCompressed
 {
@@ -27,8 +26,15 @@ namespace SuperCompressed
 
     internal static class NativeMethods
     {
+        [DllImport("SuperCompressed.Native.dll", EntryPoint = "Initialize")]
+        public static unsafe extern void Initialize();
+
+        [DllImport("SuperCompressed.Native.dll", EntryPoint = "Deinitialize")]
+        public static unsafe extern void Deinitialize();
+
+
         [DllImport("SuperCompressed.Native.dll", EntryPoint = "Encode")]
-        public static unsafe extern CompressedTexture Encode(byte* buffer, int stride, int width, int heigth, Mode mode, MipMapGeneration mipMapGeneration, Quality quality);
+        public static unsafe extern CompressedTexture Encode(byte* buffer, int components, int width, int heigth, Mode mode, MipMapGeneration mipMapGeneration, Quality quality);
 
         [DllImport("SuperCompressed.Native.dll", EntryPoint = "Free")]
         public static unsafe extern void Free(byte* buffer);
@@ -37,72 +43,70 @@ namespace SuperCompressed
     [StructLayout(LayoutKind.Sequential)]
     internal unsafe struct CompressedTexture
     {
-        public int Stride { get; }
-        public int ByteLength { get; }
+        public int ErrorCode { get; }
+        public int SizeInBytes { get; }
         public byte* Buffer { get; }
     };
 
-    public unsafe sealed class Texture : IDisposable
+    public sealed class Texture
     {
-        private readonly bool IsUnmanagedMemory;
-        private readonly MemoryHandle Handle;
-
-        public static Texture TakeOwnerShipOfNativePointer(byte* pixels, int stride, int width, int height)
+        public Texture(byte[] data, int components, int width, int height)
         {
-            return new Texture(pixels, stride, width, height);
+            Data = data;
+            Components = components;
+            Width = width;
+            Height = height;
         }
 
-        private unsafe Texture(byte* pixels, int stride, int width, int height)
-        {
-            this.Handle = new MemoryHandle(pixels);            
-            this.Stride = stride;
-            this.Width = width;
-            this.Height = height;
-
-            this.IsUnmanagedMemory = true;
-        }
-
-        public Texture(Memory<byte> pixels, int stride, int width, int height)
-        {
-            this.Handle = pixels.Pin();
-            this.Stride = stride;
-            this.Width = width;
-            this.Height = height;
-
-            this.IsUnmanagedMemory = false;
-        }
-
-        public Span<byte> GetSpan()
-        {
-            return new Span<byte>(this.Handle.Pointer, this.Stride * this.Height);
-        }
-
-        internal byte* Pointer => (byte*)this.Handle.Pointer;
-
-        public int Stride { get; }
+        public byte[] Data { get; }
+        public int Components { get; }
         public int Width { get; }
         public int Height { get; }
+    }
 
-        public void Dispose()
+    public sealed class CompressedTextureData
+    {
+        internal unsafe CompressedTextureData(byte* data, int length)
         {
-            if (this.IsUnmanagedMemory && this.Handle.Pointer != null)
-            {
-                NativeMethods.Free((byte*)this.Handle.Pointer);
-            }
-            this.Handle.Dispose();
+            this.Data = new byte[length];
+
+            var span = new ReadOnlySpan<byte>(data, length);
+            span.CopyTo(this.Data);
         }
+
+        public byte[] Data { get; }
     }
 
     public static class CoolMethods
     {
-        public static Texture Encode(Texture texture, Mode mode, MipMapGeneration mipMapGeneration, Quality quality)
+        public unsafe static CompressedTextureData Encode(Texture texture, Mode mode, MipMapGeneration mipMapGeneration, Quality quality)
         {
-            unsafe
+            fixed (byte* pData = &MemoryMarshal.GetArrayDataReference(texture.Data))
             {
-                var compressed = NativeMethods.Encode(texture.Pointer, texture.Stride, texture.Width, texture.Height, mode, mipMapGeneration, quality);
-                return Texture.TakeOwnerShipOfNativePointer(compressed.Buffer, compressed.Stride, texture.Width, texture.Height);
-            }
+                var data = new CompressedTexture();
+                try
+                {
+                    NativeMethods.Initialize();
 
-        }      
+                    data = NativeMethods.Encode(pData, texture.Components, texture.Width, texture.Height, mode, mipMapGeneration, quality);
+
+                    if (data.ErrorCode != 0)
+                    {
+                        throw new Exception($"Encoder failed: {data.ErrorCode}");
+                    }
+
+                    return new CompressedTextureData(data.Buffer, data.SizeInBytes);
+                }
+                finally
+                {
+                    if (data.ErrorCode == 0)
+                    {
+                        NativeMethods.Free(data.Buffer);
+                    }
+
+                    NativeMethods.Deinitialize();
+                }
+            }
+        }
     }
 }

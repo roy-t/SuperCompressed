@@ -18,6 +18,5 @@
 #include <basisu_comp.h>
 #include <basisu_enc.h>
 #include <basisu_transcoder.h>
-#include <fmt/format.h>
 
 #endif //PCH_H

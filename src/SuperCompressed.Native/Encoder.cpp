@@ -4,9 +4,19 @@
 
 using namespace basisu;
 
-CompressedTexture Encode(uint8_t* pImage, int32_t stride, int32_t width, int32_t heigth, Mode mode, MipMapGeneration mipMapGeneration, Quality quality)
-{	
-	image img = image(pImage, width, heigth, 4);
+void Initialize()
+{
+	basisu::basisu_encoder_init();
+}
+
+void Deinitialize()
+{
+	basisu::basisu_encoder_deinit();
+}
+
+CompressedTexture Encode(uint8_t* pImage, int32_t components, int32_t width, int32_t heigth, Mode mode, MipMapGeneration mipMapGeneration, Quality quality)
+{		
+	image img = image(pImage, width, heigth, components);
 
 	basis_compressor_params params{};
 	params.m_source_images.push_back(img);
@@ -42,26 +52,31 @@ CompressedTexture Encode(uint8_t* pImage, int32_t stride, int32_t width, int32_t
 	basis_compressor compressor{};
 
 	if (!compressor.init(params))
-	{
-		//std::string error = fmt::format("Failed to initialize compressor");
-		//throw std::exception(error.c_str());
-
-		return { -1, 0, nullptr };		
+	{		
+		return { basisu::basis_compressor::cECFailedInitializing, 0, nullptr };
 	}
 
 	auto result = compressor.process();
 	if (result != basisu::basis_compressor::cECSuccess)
 	{
-		//std::string error = fmt::format("Processor failed with {}", result);
-		//throw std::exception(error.c_str());
-
-		return { -result, 0, nullptr };
+		return { result, 0, nullptr };
 	}
 
-	auto& bytes = compressor.get_output_basis_file();
-		
-	const CompressedTexture texture = { 64, 16, bytes.data() };
-	return texture;
+	auto& data = compressor.get_output_basis_file();
+	
+	int32_t sizeInBytes = (int32_t)data.size_in_bytes();
+	uint8_t* pData = (uint8_t*)malloc(data.size_in_bytes());	
+
+	if (pData == nullptr)
+	{
+		return { -1 , 0, nullptr };
+	}
+	else
+	{
+		memcpy(pData, data.get_ptr(), data.size_in_bytes());
+	}
+
+	return { 0, sizeInBytes, pData};
 }
 
 void Free(uint8_t* buffer)

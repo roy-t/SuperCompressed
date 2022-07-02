@@ -27,13 +27,16 @@ enum MipMapGeneration : uint8_t
 
 struct CompressedTexture
 {
-    int32_t Stride;
-    int32_t ByteLength;    
+    int32_t ErrorCode;
+    int32_t SizeInBytes;
     const uint8_t* Buffer;
 };
 
 extern "C"
-{    
-    __declspec(dllexport) CompressedTexture Encode(uint8_t* pImage, int32_t stride, int32_t width, int32_t heigth, Mode mode, MipMapGeneration mipMapGeneration, Quality quality);
+{   
+    _declspec(dllexport) void Initialize();
+    _declspec(dllexport) void Deinitialize();
+
+    __declspec(dllexport) CompressedTexture Encode(uint8_t* pImage, int32_t components, int32_t width, int32_t heigth, Mode mode, MipMapGeneration mipMapGeneration, Quality quality);
     __declspec(dllexport) void Free(uint8_t* buffer);
 }
