@@ -2,56 +2,54 @@
 
 #include <stdint.h>
 
-enum Quality : uint8_t 
-{
-    Fastest,
-    Faster,
-    Default,
-    Slower,
-    Slowest
-};
-
-enum Mode : uint8_t
-{
-    SRgb,
-    Linear,    
-    Normalized        
-};
-
-enum MipMapGeneration : uint8_t
-{
-    Disabled,
-    Enabled,    
-};
-
-enum EncodeErrors : int32_t
-{
-    None,
-    FailedInitializing,
-    FailedReadingSourceImages,
-    FailedValidating,
-    FailedEncodeUASTC,
-    FailedFrontEnd,
-    FailedFontendExtract,
-    FailedBackend,
-    FailedCreateBasisFile,
-    FailedWritingOutput,
-    FailedUASTCRDOPostProcess,
-    FailedCreateKTX2File,
-    OutOfMemory,
-};
-
-
-struct EncodedTexture
-{
-    EncodeErrors ErrorCode;
-    uint8_t* Buffer;
-    int32_t Length;
-    
-};
-
 extern "C"
 {   
+    enum Quality : uint8_t
+    {
+        Fastest,
+        Faster,
+        Default,
+        Slower,
+        Slowest
+    };
+
+    enum Mode : uint8_t
+    {
+        SRgb,
+        Linear,
+        Normalized
+    };
+
+    enum MipMapGeneration : uint8_t
+    {
+        Disabled,
+        Enabled,
+    };
+
+    enum EncodeErrors : uint8_t
+    {
+        None,
+        FailedInitializing,
+        FailedReadingSourceImages,
+        FailedValidating,
+        FailedEncodeUASTC,
+        FailedFrontEnd,
+        FailedFontendExtract,
+        FailedBackend,
+        FailedCreateBasisFile,
+        FailedWritingOutput,
+        FailedUASTCRDOPostProcess,
+        FailedCreateKTX2File,
+        OutOfMemory,
+    };
+
+    struct EncodedTexture
+    {
+        EncodeErrors ErrorCode;
+        uint8_t* Buffer;
+        int32_t Length;
+    };
+
     _declspec(dllexport) void InitializeEncoder();
     _declspec(dllexport) void DeinitializeEncoder();
 

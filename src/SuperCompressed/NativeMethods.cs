@@ -1,9 +1,8 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace SuperCompressed
 {
-    internal enum EncodeErrors : int
+    internal enum EncodeErrors : byte
     {
         None,
         FailedInitializing,
@@ -50,7 +49,7 @@ namespace SuperCompressed
     }
 
 
-    internal enum TranscodeErrors : int
+    internal enum TranscodeErrors : byte
     {
         None,
         InvalidHeader,
