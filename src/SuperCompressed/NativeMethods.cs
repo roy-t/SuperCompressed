@@ -22,7 +22,7 @@ namespace SuperCompressed
     [StructLayout(LayoutKind.Sequential)]
     internal unsafe struct EncodedTexture
     {
-        public EncodeErrors ErrorCode { get; }        
+        public EncodeErrors ErrorCode { get; }
         public byte* Buffer { get; }
         public int Length { get; }
     };

@@ -96,19 +96,16 @@ TranscodedTexture Transcode(uint8_t* data, int32_t length, int32_t imageIndex, i
 	if (!transcoder.get_image_level_desc(data, ulength, uimageIndex, levelIndex, origWidth, origHeight, totalBlocks))
 	{
 		return { TranscodeErrors::InvalidImageLevelDescription, nullptr, 0, 0, 0, 0 };
-	}
-
-	uint8_t* pData = nullptr;
-	uint32_t dataLength = 0;
+	}	
 
 	transcoder.start_transcoding(data, ulength);
 
-	uint32_t status;
-
-	origWidth;
-	origHeight;
+	uint8_t* pData = nullptr;
+	uint32_t dataLength = 0;
 	uint32_t pitch = 0;
 
+	uint32_t status;
+	
 	if (basis_transcoder_format_is_uncompressed(format))
 	{
 		const uint32_t bytesPerPixel = basis_get_uncompressed_bytes_per_pixel(format);

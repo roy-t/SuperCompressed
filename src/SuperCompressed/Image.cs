@@ -38,9 +38,9 @@ namespace SuperCompressed
         public int ComponentCount => CountComponents();
 
         public int Width { get; }
-        public int Height { get; }        
+        public int Height { get; }
 
-        private int CountComponents( )
+        private int CountComponents()
         {
             return this.Components switch
             {

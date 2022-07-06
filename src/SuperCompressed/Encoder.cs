@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 
 namespace SuperCompressed
-{            
+{
     public sealed class Encoder
     {
         private static Encoder? instance;
@@ -10,7 +10,7 @@ namespace SuperCompressed
             get
             {
                 if (instance == null)
-                {                    
+                {
                     instance = new Encoder();
                 }
                 return instance;

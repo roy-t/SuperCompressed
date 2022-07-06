@@ -14,7 +14,7 @@ namespace SuperCompressed
             this.Width = width;
             this.Heigth = height;
             this.Pitch = pitch;
-            this.Format = format;            
+            this.Format = format;
         }
 
         public Span<byte> Data => new Span<byte>(this.NativeDataPointer, this.Length);

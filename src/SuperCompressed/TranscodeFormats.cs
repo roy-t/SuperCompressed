@@ -21,7 +21,7 @@
         /// <summary>
         /// Opaque only, no punchthrough alpha support yet, transcodes alpha slice if cDecodeFlagsTranscodeAlphaDataToOpaqueFormats flag is specified
         /// </summary>
-        BC1_RGB = 2,                        
+        BC1_RGB = 2,
         /// <summary>
         /// Opaque+alpha, BC4 followed by a BC1 block, alpha channel will be opaque for opaque .basis files
         /// </summary>
@@ -111,6 +111,6 @@
         /// <summary>
         /// 16bpp RGBA image stored in raster (not block) order in memory, R at bit position 12, A at bit position 0
         /// </summary>
-        RGBA4444 = 16,                      
+        RGBA4444 = 16,
     };
 }
