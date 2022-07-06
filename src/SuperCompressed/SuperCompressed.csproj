@@ -1,18 +1,62 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>$(ProjectDir)..\..\out\bin\$(Configuration)-$(Platform)\</OutputPath>
-    <IntermediateOutputPath>$(ProjectDir)..\..\out\obj\$(Configuration)-$(Platform)\</IntermediateOutputPath>
+    <OutputPath>$(ProjectDir)..\..\out\bin\dotnet\$(Configuration)-$(Platform)\</OutputPath>
+    <IntermediateOutputPath>$(ProjectDir)..\..\out\obj\dotnet\$(Configuration)-$(Platform)\</IntermediateOutputPath>
     <Platforms>x64</Platforms>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
+	<ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+		<None Include="..\..\out\bin\native\Debug-x64\SuperCompressed.Native.dll" Link="SuperCompressed.Native.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	<ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+		<None Include="..\..\out\bin\native\Release-x64\SuperCompressed.Native.dll" Link="SuperCompressed.Native.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\out\publish\logo_compress-1644730.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
   <ItemGroup>
     <PackageReference Include="StbImageSharp" Version="2.27.11" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SuperCompressed.Native\SuperCompressed.Native.vcxproj" />
   </ItemGroup>
+  <PropertyGroup>
+    <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
+    <PublishSingleFile>true</PublishSingleFile>
+	<PublishTrimmed>true</PublishTrimmed>
+	<Authors>Roy Triesscheijn</Authors>
+	<Description>Easy to use C# wrapper of the Basis Universal Supercompressed GPU texture codec. Allows you to encode JPG/PNG/BMP/TGA/PSD/GIF images. and transcoded them to all the popular DirectX/OpenGL compressed texture formats. Such as BC7_RGBA and ETC2_RGBA. </Description>
+	<PackageProjectUrl>github.com/roy-t/superCompressedDotNet</PackageProjectUrl>
+	<PackageIcon>logo_compress-1644730.png</PackageIcon>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<RepositoryUrl>github.com/roy-t/superCompressedDotNet</RepositoryUrl>
+	<PackageTags>encoding, textures, transcoding, basisu, basis, basisuniverstal, bc, etc, pvrtc, astc, game development, engine</PackageTags>
+	<AssemblyVersion>0.1</AssemblyVersion>
+	<FileVersion>0.1</FileVersion>
+	<PackageLicenseFile>LICENSE</PackageLicenseFile>
+  </PropertyGroup>
+  <ItemGroup>
+	<None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+  </PropertyGroup>
 </Project>

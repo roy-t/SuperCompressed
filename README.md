@@ -5,6 +5,8 @@ The goal of this project is to provide a single NuGet packages that allows x64 C
 
 Very much a work-in-progress. 
 
+Logo: [Compress by B. Farias from NounProject.com](https://thenounproject.com/icon/compress-1644730/)
+
 ## Notes
 When pulling the latest version of Basis Universal in the `src/external/basis_universal` submodule folder. Make sure to double check any new/renamed/removed files are present in `src/external/basisu_lib.vcxproj`
 

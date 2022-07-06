@@ -30,7 +30,6 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{59586A07-8E7E-411D-BC3D-387E039AA423}.Debug|x64.ActiveCfg = Debug|x64
-		{59586A07-8E7E-411D-BC3D-387E039AA423}.Debug|x64.Build.0 = Debug|x64
 		{59586A07-8E7E-411D-BC3D-387E039AA423}.MinSizeRel|x64.ActiveCfg = Release|x64
 		{59586A07-8E7E-411D-BC3D-387E039AA423}.MinSizeRel|x64.Build.0 = Release|x64
 		{59586A07-8E7E-411D-BC3D-387E039AA423}.Release|x64.ActiveCfg = Release|x64
@@ -49,6 +48,7 @@ Global
 		{457D7484-CAD1-4DD1-BD77-0CF3A53526DA}.Debug|x64.Build.0 = Debug|x64
 		{457D7484-CAD1-4DD1-BD77-0CF3A53526DA}.MinSizeRel|x64.ActiveCfg = Debug|x64
 		{457D7484-CAD1-4DD1-BD77-0CF3A53526DA}.Release|x64.ActiveCfg = Release|x64
+		{457D7484-CAD1-4DD1-BD77-0CF3A53526DA}.Release|x64.Build.0 = Release|x64
 		{457D7484-CAD1-4DD1-BD77-0CF3A53526DA}.RelWithDebInfo|x64.ActiveCfg = Release|x64
 		{57F706A1-6E8C-4F82-A7E1-840A8F5B7C65}.Debug|x64.ActiveCfg = Debug|x64
 		{57F706A1-6E8C-4F82-A7E1-840A8F5B7C65}.Debug|x64.Build.0 = Debug|x64
