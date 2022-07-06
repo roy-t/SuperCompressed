@@ -1,20 +1,19 @@
 #include "pch.h"
-
 #include "Encoder.h"
 
 using namespace basisu;
 
-void Initialize()
+void InitializeEncoder()
 {
 	basisu::basisu_encoder_init();
 }
 
-void Deinitialize()
+void DeinitializeEncoder()
 {
 	basisu::basisu_encoder_deinit();
 }
 
-CompressedTexture Encode(uint8_t* pImage, int32_t components, int32_t width, int32_t heigth, Mode mode, MipMapGeneration mipMapGeneration, Quality quality)
+EncodedTexture Encode(uint8_t* pImage, int32_t components, int32_t width, int32_t heigth, Mode mode, MipMapGeneration mipMapGeneration, Quality quality)
 {		
 	image img = image(pImage, width, heigth, components);
 
@@ -44,7 +43,7 @@ CompressedTexture Encode(uint8_t* pImage, int32_t components, int32_t width, int
 		break;
 	}
 
-	params.m_mip_gen = mipMapGeneration == MipMapGeneration::Full;
+	params.m_mip_gen = mipMapGeneration == MipMapGeneration::Enabled;
 
 	job_pool jpool{ 8 };
 	params.m_pJob_pool = &jpool;
@@ -53,33 +52,32 @@ CompressedTexture Encode(uint8_t* pImage, int32_t components, int32_t width, int
 
 	if (!compressor.init(params))
 	{		
-		return { basisu::basis_compressor::cECFailedInitializing, 0, nullptr };
+		return { EncodeErrors::FailedInitializing, nullptr, 0};
 	}
 
 	auto result = compressor.process();
 	if (result != basisu::basis_compressor::cECSuccess)
 	{
-		return { result, 0, nullptr };
+		return { (EncodeErrors)result, nullptr, 0 };
 	}
 
 	auto& data = compressor.get_output_basis_file();
 	
-	int32_t sizeInBytes = (int32_t)data.size_in_bytes();
 	uint8_t* pData = (uint8_t*)malloc(data.size_in_bytes());	
 
 	if (pData == nullptr)
 	{
-		return { -1 , 0, nullptr };
+		return { EncodeErrors::OutOfMemory , nullptr, 0 };
 	}
 	else
 	{
 		memcpy(pData, data.get_ptr(), data.size_in_bytes());
 	}
 
-	return { 0, sizeInBytes, pData};
+	return { EncodeErrors::None, pData, (int32_t)data.size_in_bytes() };
 }
 
-void Free(uint8_t* buffer)
+void FreeCompressedTexture(EncodedTexture texture)
 {
-	free(buffer);
+	free((void*)texture.Buffer);
 }

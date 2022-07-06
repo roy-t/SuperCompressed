@@ -1,8 +1,8 @@
 ﻿namespace SuperCompressed
 {
-    public sealed class CompressedTextureData
+    public sealed class EncodedTextureData
     {
-        internal unsafe CompressedTextureData(byte* data, int length)
+        internal unsafe EncodedTextureData(byte* data, int length)
         {
             this.Data = new byte[length];
 

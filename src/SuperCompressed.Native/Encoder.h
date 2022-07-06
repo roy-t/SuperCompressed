@@ -20,23 +20,41 @@ enum Mode : uint8_t
 
 enum MipMapGeneration : uint8_t
 {
+    Disabled,
+    Enabled,    
+};
+
+enum EncodeErrors : int32_t
+{
     None,
-    Full,    
+    FailedInitializing,
+    FailedReadingSourceImages,
+    FailedValidating,
+    FailedEncodeUASTC,
+    FailedFrontEnd,
+    FailedFontendExtract,
+    FailedBackend,
+    FailedCreateBasisFile,
+    FailedWritingOutput,
+    FailedUASTCRDOPostProcess,
+    FailedCreateKTX2File,
+    OutOfMemory,
 };
 
 
-struct CompressedTexture
+struct EncodedTexture
 {
-    int32_t ErrorCode;
-    int32_t SizeInBytes;
-    const uint8_t* Buffer;
+    EncodeErrors ErrorCode;
+    uint8_t* Buffer;
+    int32_t Length;
+    
 };
 
 extern "C"
 {   
-    _declspec(dllexport) void Initialize();
-    _declspec(dllexport) void Deinitialize();
+    _declspec(dllexport) void InitializeEncoder();
+    _declspec(dllexport) void DeinitializeEncoder();
 
-    __declspec(dllexport) CompressedTexture Encode(uint8_t* pImage, int32_t components, int32_t width, int32_t heigth, Mode mode, MipMapGeneration mipMapGeneration, Quality quality);
-    __declspec(dllexport) void Free(uint8_t* buffer);
+    __declspec(dllexport) EncodedTexture Encode(uint8_t* pImage, int32_t components, int32_t width, int32_t heigth, Mode mode, MipMapGeneration mipMapGeneration, Quality quality);
+    __declspec(dllexport) void FreeCompressedTexture(EncodedTexture texture);
 }

@@ -1,28 +1,95 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace SuperCompressed
 {
-    [StructLayout(LayoutKind.Sequential)]
-    internal unsafe struct CompressedTexture
+    internal enum EncodeErrors : int
     {
-        public int ErrorCode { get; }
-        public int SizeInBytes { get; }
-        public byte* Buffer { get; }
+        None,
+        FailedInitializing,
+        FailedReadingSourceImages,
+        FailedValidating,
+        FailedEncodeUASTC,
+        FailedFrontEnd,
+        FailedFontendExtract,
+        FailedBackend,
+        FailedCreateBasisFile,
+        FailedWritingOutput,
+        FailedUASTCRDOPostProcess,
+        FailedCreateKTX2File,
+        OutOfMemory,
     };
 
-    internal static class NativeMethods
+    [StructLayout(LayoutKind.Sequential)]
+    internal unsafe struct EncodedTexture
     {
-        [DllImport("SuperCompressed.Native.dll", EntryPoint = "Initialize")]
-        public static unsafe extern void Initialize();
+        public EncodeErrors ErrorCode { get; }        
+        public byte* Buffer { get; }
+        public int Length { get; }
+    };
 
-        [DllImport("SuperCompressed.Native.dll", EntryPoint = "Deinitialize")]
-        public static unsafe extern void Deinitialize();
+    internal static class NativeEncoder
+    {
+        [DllImport("SuperCompressed.Native.dll", EntryPoint = "InitializeEncoder")]
+        public static extern void InitializeEncoder();
 
+        [DllImport("SuperCompressed.Native.dll", EntryPoint = "DeinitializeEncoder")]
+        public static extern void DeinitializeEncoder();
+
+        [DllImport("SuperCompressed.Native.dll", EntryPoint = "InitializeTranscoder")]
+        public static extern void InitializeTranscoder();
+
+        [DllImport("SuperCompressed.Native.dll", EntryPoint = "DeinitializeTranscoder")]
+        public static extern void DeinitializeTranscoder();
 
         [DllImport("SuperCompressed.Native.dll", EntryPoint = "Encode")]
-        public static unsafe extern CompressedTexture Encode(byte* buffer, int components, int width, int heigth, Mode mode, MipMapGeneration mipMapGeneration, Quality quality);
+        public static unsafe extern EncodedTexture Encode(byte* buffer, int components, int width, int heigth, Mode mode, MipMapGeneration mipMapGeneration, Quality quality);
 
-        [DllImport("SuperCompressed.Native.dll", EntryPoint = "Free")]
-        public static unsafe extern void Free(byte* buffer);
-    }    
+        [DllImport("SuperCompressed.Native.dll", EntryPoint = "FreeCompressedTexture")]
+        public static extern void FreeCompressedTexture(EncodedTexture texture);
+    }
+
+
+    internal enum TranscodeErrors : int
+    {
+        None,
+        InvalidHeader,
+        InvalidFileInfo,
+        InvalidImageInfo,
+        InvalidImageLevelDescription,
+        ImageIndexOutOfRange,
+        LevelIndexOutOfRange,
+        Failed,
+        OutOfMemory,
+    };
+
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal unsafe struct TranscodedTexture
+    {
+        public TranscodeErrors ErrorCode { get; }
+        public byte* Buffer { get; }
+        public int Length { get; }
+        public int Width { get; }
+        public int Heigth { get; }
+        public int Pitch { get; }
+    };
+
+    internal static class NativeTranscoder
+    {
+        [DllImport("SuperCompressed.Native.dll", EntryPoint = "InitializeTranscoder")]
+        public static extern void InitializeTranscoder();
+
+        [DllImport("SuperCompressed.Native.dll", EntryPoint = "GetImageCount")]
+        public static unsafe extern int GetImageCount(byte* buffer, int length);
+
+        [DllImport("SuperCompressed.Native.dll", EntryPoint = "GetLevelCount")]
+        public static unsafe extern int GetLevelCount(byte* buffer, int length, int imageIndex);
+
+        [DllImport("SuperCompressed.Native.dll", EntryPoint = "Transcode")]
+        public static unsafe extern TranscodedTexture Transcode(byte* buffer, int length, int imageIndex, int levelIndex, TranscodeFormats targetFormat);
+
+        [DllImport("SuperCompressed.Native.dll", EntryPoint = "FreeTranscodedTexture")]
+        public static unsafe extern void FreeTranscodedTexture(TranscodedTexture texture);
+    }
 }

@@ -2,7 +2,7 @@
 
 namespace SuperCompressed
 {            
-    public class Encoder
+    public sealed class Encoder
     {
         private static Encoder? instance;
         public static Encoder Instance
@@ -19,40 +19,36 @@ namespace SuperCompressed
 
         Encoder()
         {
-            NativeMethods.Initialize();
+            NativeEncoder.InitializeEncoder();
         }
 
         ~Encoder()
         {
-            NativeMethods.Deinitialize();
+            NativeEncoder.DeinitializeEncoder();
         }
 
-        public unsafe CompressedTextureData Encode(Image texture, Mode mode, MipMapGeneration mipMapGeneration, Quality quality)
+        public unsafe EncodedTextureData Encode(Image texture, Mode mode, MipMapGeneration mipMapGeneration, Quality quality)
         {
             fixed (byte* pData = &MemoryMarshal.GetReference(texture.Data))
             {
-                var data = new CompressedTexture();
+                var data = new EncodedTexture();
                 try
                 {
-                    NativeMethods.Initialize();
+                    data = NativeEncoder.Encode(pData, texture.ComponentCount, texture.Width, texture.Height, mode, mipMapGeneration, quality);
 
-                    data = NativeMethods.Encode(pData, texture.ComponentCount, texture.Width, texture.Height, mode, mipMapGeneration, quality);
-
-                    if (data.ErrorCode != 0)
+                    if (data.ErrorCode != EncodeErrors.None)
                     {
                         throw new Exception($"Encoder failed: {data.ErrorCode}");
                     }
 
-                    return new CompressedTextureData(data.Buffer, data.SizeInBytes);
+                    return new EncodedTextureData(data.Buffer, data.Length);
                 }
                 finally
                 {
                     if (data.ErrorCode == 0)
                     {
-                        NativeMethods.Free(data.Buffer);
+                        NativeEncoder.FreeCompressedTexture(data);
                     }
-
-                    NativeMethods.Deinitialize();
                 }
             }
         }

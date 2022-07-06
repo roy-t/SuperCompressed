@@ -98,6 +98,7 @@
   <ItemGroup>
     <ClInclude Include="Encoder.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Transcoder.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
@@ -106,6 +107,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Transcoder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\external\basisu_lib.vcxproj">
