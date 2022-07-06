@@ -62,7 +62,7 @@ EncodedTexture Encode(uint8_t* pImage, int32_t components, int32_t width, int32_
 	}
 
 	auto& data = compressor.get_output_basis_file();
-	
+		
 	uint8_t* pData = (uint8_t*)malloc(data.size_in_bytes());	
 
 	if (pData == nullptr)

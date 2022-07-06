@@ -98,7 +98,8 @@ TranscodedTexture Transcode(uint8_t* data, int32_t length, int32_t imageIndex, i
 		return { TranscodeErrors::InvalidImageLevelDescription, nullptr, 0, 0, 0, 0 };
 	}
 
-	basisu::vector<uint8_t> output;
+	uint8_t* pData = nullptr;
+	uint32_t dataLength = 0;
 
 	transcoder.start_transcoding(data, ulength);
 
@@ -112,18 +113,22 @@ TranscodedTexture Transcode(uint8_t* data, int32_t length, int32_t imageIndex, i
 	{
 		const uint32_t bytesPerPixel = basis_get_uncompressed_bytes_per_pixel(format);
 		const uint32_t bytesPerLine = origWidth * bytesPerPixel;
-		const uint32_t bytesPerSlice = bytesPerLine * origHeight;
+		dataLength = bytesPerLine * origHeight;
 
 		pitch = bytesPerLine;
 
-		output.resize(bytesPerSlice);
+		pData = (uint8_t*)malloc(dataLength);
+		if (pData == nullptr)
+		{
+			return { TranscodeErrors::OutOfMemory, nullptr, 0, 0, 0, 0 };
+		}
 
 		status = transcoder.transcode_image_level(
 			data,
 			ulength,
 			imageIndex,
 			levelIndex,
-			output.data(),
+			pData,
 			origWidth * origHeight,
 			format,
 			flags,
@@ -136,7 +141,7 @@ TranscodedTexture Transcode(uint8_t* data, int32_t length, int32_t imageIndex, i
 		const uint32_t bytesPerBlock = basis_get_bytes_per_block_or_pixel(format);
 		const uint32_t blockWidth = basis_get_block_width(format);
 		const uint32_t blocksPerLine = origWidth / blockWidth;
-		uint32_t requiredSize = totalBlocks * bytesPerBlock;
+		dataLength = totalBlocks * bytesPerBlock;
 
 		pitch = bytesPerBlock * blocksPerLine;
 
@@ -146,19 +151,23 @@ TranscodedTexture Transcode(uint8_t* data, int32_t length, int32_t imageIndex, i
 		{
 			const uint32_t width = (origWidth + 3) & ~3;
 			const uint32_t height = (origHeight + 3) & ~3;
-			requiredSize = (std::max(8U, width) * std::max(8U, height) * 4 + 7) / 8;
-			assert(requiredSize >= totalBlocks * bytesPerBlock);
+			dataLength = (std::max(8U, width) * std::max(8U, height) * 4 + 7) / 8;
+			assert(dataLength >= totalBlocks * bytesPerBlock);
 		}
 
-		output.resize(requiredSize);
+		pData = (uint8_t*)malloc(dataLength);
+		if (pData == nullptr)
+		{
+			return { TranscodeErrors::OutOfMemory, nullptr, 0, 0, 0, 0 };
+		}
 
 		status = transcoder.transcode_image_level(
 			data,
 			ulength,
 			imageIndex,
 			levelIndex,
-			output.data(),
-			output.size() / bytesPerBlock,
+			pData,
+			dataLength / bytesPerBlock,
 			format,
 			flags);
 	}
@@ -166,22 +175,11 @@ TranscodedTexture Transcode(uint8_t* data, int32_t length, int32_t imageIndex, i
 	if (!status)
 	{
 		return { TranscodeErrors::Failed, nullptr, 0, 0, 0, 0 };		
-	}
+	}	
 	
-	uint8_t* pData = (uint8_t*)malloc(output.size_in_bytes());
-
-	if (pData == nullptr)
-	{
-		return { TranscodeErrors::OutOfMemory, nullptr, 0, 0, 0, 0 };
-	}
-	else
-	{
-		memcpy(pData, output.get_ptr(), output.size_in_bytes());
-	}
-
 	transcoder.stop_transcoding();
 
-	return { TranscodeErrors::None, pData, (int32_t)output.size_in_bytes(), (int32_t)origWidth, (int32_t)origHeight, (int32_t)pitch };
+	return { TranscodeErrors::None, pData, (int32_t)dataLength, (int32_t)origWidth, (int32_t)origHeight, (int32_t)pitch };
 }
 
 void FreeTranscodedTexture(TranscodedTexture texture)
