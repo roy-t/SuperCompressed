@@ -11,8 +11,10 @@ namespace SuperCompressed
         RedGreenBlueAlpha
     }
 
-    public ref struct Image
+    public sealed class Image
     {
+        private readonly byte[] Bytes;
+
         /// <summary>
         /// Loads a JPG/PNG/BMP/TGA/PSD/GIF as Image using the StbImageSharp library
         /// </summary>
@@ -22,15 +24,15 @@ namespace SuperCompressed
             return new Image(image.Data, (ColorComponents)image.Comp, image.Width, image.Height);
         }
 
-        public Image(Span<byte> data, ColorComponents components, int width, int height)
+        public Image(byte[] data, ColorComponents components, int width, int height)
         {
-            Data = data;
+            this.Bytes = data;
             Components = components;
             Width = width;
             Height = height;
         }
 
-        public ReadOnlySpan<byte> Data { get; }
+        public ReadOnlySpan<byte> Data => new ReadOnlySpan<byte>(this.Bytes);
         public ColorComponents Components { get; }
 
         public int ComponentCount => CountComponents();
