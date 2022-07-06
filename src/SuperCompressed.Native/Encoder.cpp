@@ -77,7 +77,7 @@ EncodedTexture Encode(uint8_t* pImage, int32_t components, int32_t width, int32_
 	return { EncodeErrors::None, pData, (int32_t)data.size_in_bytes() };
 }
 
-void FreeCompressedTexture(EncodedTexture texture)
+void FreeCompressedTexture(uint8_t* texture)
 {
-	free((void*)texture.Buffer);
+	free(texture);
 }

@@ -54,5 +54,5 @@ extern "C"
     _declspec(dllexport) void DeinitializeEncoder();
 
     __declspec(dllexport) EncodedTexture Encode(uint8_t* pImage, int32_t components, int32_t width, int32_t heigth, Mode mode, MipMapGeneration mipMapGeneration, Quality quality);
-    __declspec(dllexport) void FreeCompressedTexture(EncodedTexture texture);
+    __declspec(dllexport) void FreeCompressedTexture(uint8_t* texture);
 }

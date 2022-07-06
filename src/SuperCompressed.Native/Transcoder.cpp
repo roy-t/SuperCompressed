@@ -182,7 +182,7 @@ TranscodedTexture Transcode(uint8_t* data, int32_t length, int32_t imageIndex, i
 	return { TranscodeErrors::None, pData, (int32_t)dataLength, (int32_t)origWidth, (int32_t)origHeight, (int32_t)pitch };
 }
 
-void FreeTranscodedTexture(TranscodedTexture texture)
+void FreeTranscodedTexture(uint8_t* texture)
 {
-	free((void*)texture.Buffer);
+	free(texture);
 }

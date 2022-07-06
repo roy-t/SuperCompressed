@@ -1,24 +1,31 @@
-﻿namespace SuperCompressed
+﻿
+namespace SuperCompressed
 {
-    public sealed class TranscodedTextureData
+    public unsafe sealed class TranscodedTextureData : IDisposable
     {
+        private readonly byte* NativeDataPointer;
+        private readonly int Length;
+
         internal unsafe TranscodedTextureData(byte* data, int length, int width, int height, int pitch, TranscodeFormats format)
         {
-            this.Data = new byte[length];
+            this.NativeDataPointer = data;
+            this.Length = length;
 
-            var span = new ReadOnlySpan<byte>(data, length);
-            span.CopyTo(this.Data);
-                        
             this.Width = width;
             this.Heigth = height;
             this.Pitch = pitch;
-            this.Format = format;
+            this.Format = format;            
         }
 
-        public byte[] Data { get; }
+        public Span<byte> Data => new Span<byte>(this.NativeDataPointer, this.Length);
         public int Width { get; }
         public int Heigth { get; }
         public int Pitch { get; }
         public TranscodeFormats Format { get; }
+
+        public void Dispose()
+        {
+            NativeTranscoder.FreeTranscodedTexture(this.NativeDataPointer);
+        }
     }
 }

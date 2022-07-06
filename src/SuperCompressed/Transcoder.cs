@@ -54,25 +54,15 @@ namespace SuperCompressed
         {
             fixed (byte* pData = &MemoryMarshal.GetReference(texture))
             {
-                var data = new TranscodedTexture();
-                try
-                {
-                    data = NativeTranscoder.Transcode(pData, texture.Length, imageIndex, levelIndex, targetFormat);
+                var data = NativeTranscoder.Transcode(pData, texture.Length, imageIndex, levelIndex, targetFormat);
 
-                    if (data.ErrorCode != TranscodeErrors.None)
-                    {
-                        throw new Exception($"Transcoder failed: {data.ErrorCode}");
-                    }
-
-                    return new TranscodedTextureData(data.Buffer, data.Length, data.Width, data.Heigth, data.Pitch, targetFormat);
-                }
-                finally
+                if (data.ErrorCode != TranscodeErrors.None)
                 {
-                    if (data.ErrorCode == 0)
-                    {
-                        NativeTranscoder.FreeTranscodedTexture(data);
-                    }
+                    throw new Exception($"Transcoder failed: {data.ErrorCode}");
                 }
+
+                return new TranscodedTextureData(data.Buffer, data.Length, data.Width, data.Heigth, data.Pitch, targetFormat);
+
             }
         }
     }

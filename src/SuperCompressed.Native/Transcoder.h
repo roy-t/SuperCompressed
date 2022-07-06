@@ -78,6 +78,6 @@ extern "C"
 
     _declspec(dllexport) TranscodedTexture Transcode(uint8_t* data, int32_t length, int32_t imageIndex, int32_t levelIndex, Format targetFormat);
 
-    __declspec(dllexport) void FreeTranscodedTexture(TranscodedTexture texture);
+    __declspec(dllexport) void FreeTranscodedTexture(uint8_t* texture);
 }
 

@@ -31,25 +31,14 @@ namespace SuperCompressed
         {
             fixed (byte* pData = &MemoryMarshal.GetReference(texture.Data))
             {
-                var data = new EncodedTexture();
-                try
-                {
-                    data = NativeEncoder.Encode(pData, texture.ComponentCount, texture.Width, texture.Height, mode, mipMapGeneration, quality);
+                var data = NativeEncoder.Encode(pData, texture.ComponentCount, texture.Width, texture.Height, mode, mipMapGeneration, quality);
 
-                    if (data.ErrorCode != EncodeErrors.None)
-                    {
-                        throw new Exception($"Encoder failed: {data.ErrorCode}");
-                    }
-
-                    return new EncodedTextureData(data.Buffer, data.Length);
-                }
-                finally
+                if (data.ErrorCode != EncodeErrors.None)
                 {
-                    if (data.ErrorCode == 0)
-                    {
-                        NativeEncoder.FreeCompressedTexture(data);
-                    }
+                    throw new Exception($"Encoder failed: {data.ErrorCode}");
                 }
+
+                return new EncodedTextureData(data.Buffer, data.Length);
             }
         }
     }

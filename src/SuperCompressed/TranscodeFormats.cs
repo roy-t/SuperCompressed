@@ -1,5 +1,8 @@
 ﻿namespace SuperCompressed
 {
+    // NOTE: Formats that are commented out are supported by BasisU, but did not work when I tested them on Windows
+    // using an NVidia RTX2080. These formats are either extremely niche or intended for mobile devices
+
     public enum TranscodeFormats : byte
     {
         // ETC1-2
@@ -54,34 +57,34 @@
         /// </summary>
         ASTC_4x4_RGBA = 10,
 
-        // ATC (mobile, Adreno devices, this is a niche format)
+        //// ATC (mobile, Adreno devices, this is a niche format)
 
-        /// <summary>
-        /// Opaque, RGB or alpha if cDecodeFlagsTranscodeAlphaDataToOpaqueFormats flag is specified. ATI ATC (GL_ATC_RGB_AMD)
-        /// </summary>
-        ATC_RGB = 11,
-        /// <summary>
-        /// Opaque+alpha, alpha channel will be opaque for opaque .basis files. ATI ATC (GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD) 
-        /// </summary>
-        ATC_RGBA = 12,
+        ///// <summary>
+        ///// Opaque, RGB or alpha if cDecodeFlagsTranscodeAlphaDataToOpaqueFormats flag is specified. ATI ATC (GL_ATC_RGB_AMD)
+        ///// </summary>
+        //ATC_RGB = 11,
+        ///// <summary>
+        ///// Opaque+alpha, alpha channel will be opaque for opaque .basis files. ATI ATC (GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD) 
+        ///// </summary>
+        //ATC_RGBA = 12,
 
-        // FXT1 (desktop, Intel devices, this is a super obscure format)
+        //// FXT1 (desktop, Intel devices, this is a super obscure format)
 
-        /// <summary>
-        /// Opaque only, uses exclusively CC_MIXED blocks. Notable for having a 8x4 block size. GL_3DFX_texture_compression_FXT1 is supported on Intel integrated GPU's (such as HD 630).
-        /// Punch-through alpha is relatively easy to support, but full alpha is harder. This format is only here for completeness so opaque-only is fine for now.
-        /// See the BASISU_USE_ORIGINAL_3DFX_FXT1_ENCODING macro in basisu_transcoder_internal.h.
-        /// </summary>
-        FXT1_RGB = 17,
+        ///// <summary>
+        ///// Opaque only, uses exclusively CC_MIXED blocks. Notable for having a 8x4 block size. GL_3DFX_texture_compression_FXT1 is supported on Intel integrated GPU's (such as HD 630).
+        ///// Punch-through alpha is relatively easy to support, but full alpha is harder. This format is only here for completeness so opaque-only is fine for now.
+        ///// See the BASISU_USE_ORIGINAL_3DFX_FXT1_ENCODING macro in basisu_transcoder_internal.h.
+        ///// </summary>
+        //FXT1_RGB = 17,
 
-        /// <summary>
-        /// Opaque-only, almost BC1 quality, much faster to transcode and supports arbitrary texture dimensions (unlike PVRTC1 RGB).
-        /// </summary>
-        PVRTC2_4_RGB = 18,
-        /// <summary>
-        /// Opaque+alpha, slower to encode than PVRTC2_4_RGB. Premultiplied alpha is highly recommended, otherwise the color channel can leak into the alpha channel on transparent blocks.
-        /// </summary>
-        PVRTC2_4_RGBA = 19,
+        ///// <summary>
+        ///// Opaque-only, almost BC1 quality, much faster to transcode and supports arbitrary texture dimensions (unlike PVRTC1 RGB).
+        ///// </summary>
+        //PVRTC2_4_RGB = 18,
+        ///// <summary>
+        ///// Opaque+alpha, slower to encode than PVRTC2_4_RGB. Premultiplied alpha is highly recommended, otherwise the color channel can leak into the alpha channel on transparent blocks.
+        ///// </summary>
+        //PVRTC2_4_RGBA = 19,
 
         /// <summary>
         /// R only (ETC2 EAC R11 unsigned)

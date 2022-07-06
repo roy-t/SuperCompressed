@@ -45,7 +45,7 @@ namespace SuperCompressed
         public static unsafe extern EncodedTexture Encode(byte* buffer, int components, int width, int heigth, Mode mode, MipMapGeneration mipMapGeneration, Quality quality);
 
         [DllImport("SuperCompressed.Native.dll", EntryPoint = "FreeCompressedTexture")]
-        public static extern void FreeCompressedTexture(EncodedTexture texture);
+        public static unsafe extern void FreeCompressedTexture(byte* texture);
     }
 
 
@@ -89,6 +89,6 @@ namespace SuperCompressed
         public static unsafe extern TranscodedTexture Transcode(byte* buffer, int length, int imageIndex, int levelIndex, TranscodeFormats targetFormat);
 
         [DllImport("SuperCompressed.Native.dll", EntryPoint = "FreeTranscodedTexture")]
-        public static unsafe extern void FreeTranscodedTexture(TranscodedTexture texture);
+        public static unsafe extern void FreeTranscodedTexture(byte* texture);
     }
 }
