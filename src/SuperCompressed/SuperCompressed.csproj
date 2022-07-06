@@ -4,18 +4,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>$(ProjectDir)..\..\out\bin\dotnet\$(Configuration)-$(Platform)\</OutputPath>
-    <IntermediateOutputPath>$(ProjectDir)..\..\out\obj\dotnet\$(Configuration)-$(Platform)\</IntermediateOutputPath>
+    <OutputPath>$(ProjectDir)..\..\out\bin\$(Configuration)-$(Platform)\</OutputPath>
+    <IntermediateOutputPath>$(ProjectDir)..\..\out\obj\$(Configuration)-$(Platform)\$(ProjectName)\</IntermediateOutputPath>
     <Platforms>x64</Platforms>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
-	<!--<ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-		<Content Include="..\..\out\bin\debug\lib\net6.0-windows\SuperCompressed.Native.dll" Link="SuperCompressed.Native.dll">
+	<ItemGroup>
+		<Content Include="$(OutputPath)\..\SuperCompressed.Native.dll">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>-->
-	<ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-		<Content Include="$(OutputPath)\lib\net6.0-windows\SuperCompressed.Native.dll">
 			<Pack>True</Pack>
 			<PackagePath>runtimes\win-x64\native</PackagePath>
 		</Content>
