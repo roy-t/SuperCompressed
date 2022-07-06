@@ -44,13 +44,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(ProjectDir)..\..\out\bin\native\$(Configuration)-$(Platform)\</OutDir>
-    <IntDir>$(ProjectDir)..\..\out\obj\native\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(ProjectDir)..\..\out\bin\debug\lib\net6.0-windows\</OutDir>
+    <IntDir>$(ProjectDir)..\..\out\obj\debug\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <IncludePath>$(ProjectDir)..\external\basis_universal\OpenCL;$(ProjectDir)..\external\basis_universal\encoder;$(ProjectDir)..\external\basis_universal\transcoder;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(ProjectDir)..\..\out\bin\native\$(Configuration)-$(Platform)\</OutDir>
-    <IntDir>$(ProjectDir)..\..\out\obj\native\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(ProjectDir)..\..\out\bin\dotnet\Release-x64\win10-x64\lib\net6.0-windows\</OutDir>
+    <IntDir>$(ProjectDir)..\..\out\obj\release\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <IncludePath>$(ProjectDir)..\external\basis_universal\OpenCL;$(ProjectDir)..\external\basis_universal\encoder;$(ProjectDir)..\external\basis_universal\transcoder;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
