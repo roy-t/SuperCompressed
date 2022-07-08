@@ -18,6 +18,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SuperCompressed.Native", "src\SuperCompressed.Native\SuperCompressed.Native.vcxproj", "{4018B89E-21C7-4D85-9D4A-3E9FBD3AAE4A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperCompressed", "src\SuperCompressed\SuperCompressed.csproj", "{457D7484-CAD1-4DD1-BD77-0CF3A53526DA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4018B89E-21C7-4D85-9D4A-3E9FBD3AAE4A} = {4018B89E-21C7-4D85-9D4A-3E9FBD3AAE4A}
+		{59586A07-8E7E-411D-BC3D-387E039AA423} = {59586A07-8E7E-411D-BC3D-387E039AA423}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperCompressed.Tests", "src\SuperCompressed.Tests\SuperCompressed.Tests.csproj", "{57F706A1-6E8C-4F82-A7E1-840A8F5B7C65}"
 EndProject

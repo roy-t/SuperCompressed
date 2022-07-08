@@ -11,9 +11,9 @@ namespace SuperCompressed.Tests
             var image = Image.FromStream(File.OpenRead(filename));
 
             var encoder = Encoder.Instance;
-            using var encoded = encoder.Encode(image, Mode.SRgb, MipMapGeneration.Full, Quality.Slower);
+            var encoded = encoder.Encode(image, Mode.SRgb, MipMapGeneration.Full, Quality.Slower);
 
-            True(encoded.Data.Length > 0);
+            True(encoded.Length > 0);
         }
 
         [Fact]
@@ -23,17 +23,17 @@ namespace SuperCompressed.Tests
             var uncompressed = Image.FromStream(File.OpenRead(filename));
 
             var encoder = Encoder.Instance;
-            using var encoded = encoder.Encode(uncompressed, Mode.SRgb, MipMapGeneration.Full, Quality.Slower);
+            var encoded = encoder.Encode(uncompressed, Mode.SRgb, MipMapGeneration.Full, Quality.Slower);
 
-            True(encoded.Data.Length > 0);
+            True(encoded.Length > 0);
 
 
             var transcoder = Transcoder.Instance;
-            var images = transcoder.GetImageCount(encoded.Data);
+            var images = transcoder.GetImageCount(encoded);
 
             Equal(1, images);
 
-            var levels = transcoder.GetLevelCount(encoded.Data, 0);
+            var levels = transcoder.GetLevelCount(encoded, 0);
 
             Equal(8, levels);
 
@@ -46,7 +46,7 @@ namespace SuperCompressed.Tests
                 {
                     foreach (var levelIndex in Enumerable.Range(0, levels))
                     {
-                        using var transcoded = transcoder.Transcode(encoded.Data, imageIndex, levelIndex, targetFormat);
+                        using var transcoded = transcoder.Transcode(encoded, imageIndex, levelIndex, targetFormat);
                         True(transcoded.Data.Length > 0);
                         Equal(128 >> levelIndex, transcoded.Width);
                         Equal(128 >> levelIndex, transcoded.Heigth);

@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.IO.Compression;
+using System.Runtime.InteropServices;
 
 namespace SuperCompressed
 {
@@ -22,11 +23,29 @@ namespace SuperCompressed
             NativeTranscoder.InitializeTranscoder();
         }
 
+        private static ReadOnlySpan<byte> Decompress(ReadOnlySpan<byte> texture)
+        {
+            var originalLength = BitConverter.ToInt32(texture.Slice(0, 4));
+            var decompressed = new byte[originalLength];
+
+            if (BrotliDecoder.TryDecompress(texture.Slice(4), decompressed, out var written))
+            {
+                if(written == originalLength)
+                {
+                    return decompressed;
+                }                
+            }
+
+            throw new Exception($"Failed to decompress texture data");
+        }
+
         public unsafe int GetImageCount(ReadOnlySpan<byte> texture)
         {
-            fixed (byte* pData = &MemoryMarshal.GetReference(texture))
+            var textureData = Decompress(texture);
+
+            fixed (byte* pData = &MemoryMarshal.GetReference(textureData))
             {
-                var imageCount = NativeTranscoder.GetImageCount(pData, texture.Length);
+                var imageCount = NativeTranscoder.GetImageCount(pData, textureData.Length);
                 if (imageCount >= 0)
                 {
                     return imageCount;
@@ -38,9 +57,11 @@ namespace SuperCompressed
 
         public unsafe int GetLevelCount(ReadOnlySpan<byte> texture, int imageIndex)
         {
-            fixed (byte* pData = &MemoryMarshal.GetReference(texture))
+            var textureData = Decompress(texture);
+
+            fixed (byte* pData = &MemoryMarshal.GetReference(textureData))
             {
-                var levelCount = NativeTranscoder.GetLevelCount(pData, texture.Length, imageIndex);
+                var levelCount = NativeTranscoder.GetLevelCount(pData, textureData.Length, imageIndex);
                 if (levelCount >= 0)
                 {
                     return levelCount;
@@ -52,9 +73,11 @@ namespace SuperCompressed
 
         public unsafe TranscodedTextureData Transcode(ReadOnlySpan<byte> texture, int imageIndex, int levelIndex, TranscodeFormats targetFormat)
         {
-            fixed (byte* pData = &MemoryMarshal.GetReference(texture))
+            var textureData = Decompress(texture);
+
+            fixed (byte* pData = &MemoryMarshal.GetReference(textureData))
             {
-                var data = NativeTranscoder.Transcode(pData, texture.Length, imageIndex, levelIndex, targetFormat);
+                var data = NativeTranscoder.Transcode(pData, textureData.Length, imageIndex, levelIndex, targetFormat);
 
                 if (data.ErrorCode != TranscodeErrors.None)
                 {

@@ -21,6 +21,7 @@ EncodedTexture Encode(uint8_t* pImage, int32_t components, int32_t width, int32_
 	params.m_source_images.push_back(img);
 
 	params.m_uastc = true;
+	params.m_rdo_uastc = true;
 	params.m_pack_uastc_flags &= ~cPackUASTCLevelMask;
 	static const uint32_t s_level_flags[TOTAL_PACK_UASTC_LEVELS] = { cPackUASTCLevelFastest, cPackUASTCLevelFaster, cPackUASTCLevelDefault, cPackUASTCLevelSlower, cPackUASTCLevelVerySlow };
 	params.m_pack_uastc_flags |= s_level_flags[quality];
