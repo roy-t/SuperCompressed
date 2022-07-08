@@ -1,49 +1,137 @@
 # SuperCompressed
 
-SuperCompressed is a library that allows you to create, and work with, [compressed texture formats](http://renderingpipeline.com/2012/07/texture-compression/) in your game and multimedia applications. It uses Binomial's [Basis Universal Supercompressed GPU Texture Codec](https://github.com/BinomialLLC/basis_universal).
+SuperCompressed is a library for creating 'super compressed' textures from images and transcoding those super compressed textures to common DirectX, OpenGL, and Vulkan [(compressed) pixel formats](http://renderingpipeline.com/2012/07/texture-compression/).
 
-Using SuperCompressed you can compress your images to the intermediate .basis format. This format can be quickly transcoded to a wide variety of GPU compressed and uncompressed pixel formats. From ASTC and BC1~7 to ETC and PVRTC. For a complete list see [TranscodeFormats.cs](src/SuperCompressed/TranscodeFormats.cs). 
-
-This library contains both the encoding and transcoding parts. Great for use in your asset pipeline, game engine, or other multimedia project.
-
+# How does it work?
 
 ## Installation
-Because of native components you can only use SuperCompressed in projets targetting `.NET 6.0` on Windows, 64 bits. 
+You can install SuperCompressed via the NuGet package manager, or directly via the command line via:
+
+```PS
+dotnet add package SuperCompressed
+```
+> **Warning**
+> Because of a native component, SuperCompressed works only on 64bit .NET 6 or higher applications, targetting Windows 7 or higher. In general this is not a problem since you are probably also targetting a native Graphics API if you are using this library.
+
+## Loading an image
+SuperCompressed can load any JPG/PNG/TGA/BMP/PSD/GIF image for you. Alternatively you can bring your own image data as a byte array with 1, 2, 3 or 4 color components per pixel.
+
+```C#
+using System.IO;
+using SuperCompressed;
+
+var image = Image.FromStream(File.OpenRead(filename));
+
+// or alternatively you can provide your own image data
+var image = new Image(/*byte[]*/ data, ColorComponents.RedGreenBlue, width, height);
+```
+
+## Encoding
+
+You can encode this image using the `Encoder` class. SuperCompressed can work in several different modes, which are useful for different kinds of images.
+- `Mode.SRgb`, for regular images, such as photos and diffuse textures
+- `Mode.Linear`, for linear data, such as heigthmaps and look-up tables
+- `Mode.Normalized`, for normalized data, mostly normal maps
+
+You can also choose to generate [mipmaps](https://en.wikipedia.org/wiki/Mipmap) and choose from different quality settings.
+
+> **Warning**
+> Higher quality levels are significantly slower to encode and provide only a fractionaly better image quality. In most scenarios the default quality level should suffice.
+
+```C#
+Span<byte> encoded = Encoder.Instance.Encode(image, Mode.SRgb, MipMapGeneration.Full, Quality.Default);
+```
+
+You can then write the data to disk using the standard .NET APIs.
+
+## Transcoding
+
+When you want to transcode the data to a GPU (compressed) pixel format you can use the `Transcoder` class. You should first query how many images and mipmaps are in the data block that you provided.
+
+> **Note**
+> Currently the SuperCompressed Encoder supports only one image per data block. This will change in the future, which is why the Transcoder already has support for multiple images.
+
+```C#
+var transcoder = Transcoder.Instance;
+var images = transcoder.GetImageCount(encoded);
+
+if (images <= 0)
+    return;
+
+var imageIndex = 0;
+
+var levels = transcoder.GetLevelCount(encoded, 0);
+
+if (levels <= 0)
+    return;
+
+var mipMapLevel = 0;
+```
+
+After you have determined what image and mipmap level you want to transcode. You can do so using the `Transcode` method. Check the [`TranscodeFormats` enum](src/SuperCompressed/TranscodeFormats.cs) for an up to date list of supported formats.
 
 
-# Notes
-SuperCompressed uses Basis Universal's `UASTC`-mode. Which is the high-quality mode and is suitable for all texture types, including normal maps. Using Basis Universal's RDO optimization and further losless compression using the `zstd` algorithm the image is super compressed.
+```C#
+TranscodedTextureData transcoded = Transcoder.Instance.Transcode(encoded, imageIndex, mipMapLevel, TranscodeFormats.BC7_RGBA);
+```
+> **Note**
+> You will have to call the `Transcode` method multiple times to get all the mipmaps, if there are more than one.
 
-Image | Original Size| Encoded Size | Supercompressed Size
+
+The returned instance of the `TranscodedTextureData` class contains all the information you need to upload the texture to your GPU, using the appropriate method of your graphics framework. For example, using the excellent [Vortice.Windows](https://github.com/amerkoleci/Vortice.Windows) C# bindings for DirectX.
+
+```C#
+using Vortice.Direct3D11;
+using Vortice.DXGI;
+
+// ....
+
+var description = new Texture2DDescription
+{
+    Width = transcoded.Width,
+    Height = transcoded.Height,
+    Format = ToDirectXFormat(transcoded.Format),
+    MipLevels = 1,
+    ArraySize = 1,
+    SampleDescription = new SampleDescription(1, 0),
+    Usage = ResourceUsage.Default,
+    BindFlags = BindFlags.ShaderResource,
+    CPUAccessFlags = CpuAccessFlags.None,
+    MiscFlags = ResourceOptionFlags.None
+};
+ID3D11Texture2D texture = ID3D11Device.CreateTexture2D(description);
+ID3D11DeviceContext.UpdateSubresource(transcoded.Data, texture, 0, transcoded.Pitch, 0);
+```
+
+After you have uploaded the texture data you should dispose the `TranscodedTextureData` instance to release native memory.
+
+```C#
+encoded.Dispose();
+```
+
+For more examples checkout the [unit tests](src/SuperCompressed.Tests/UnitTests.cs).
+
+# What is under the hood?
+
+SuperCompressed uses the [Basis Universal](https://github.com/BinomialLLC/basis_universal) GPU Texture Codec for encoding and transcoding textures.
+BasisU runs in `UASTC` mode with the RDO optimizations enabled. After encoding the texture is further compressed using the [zstd algorithm](https://github.com/oleg-st/ZstdSharp).
+
+All this leads to files that are frequently less than 25% of the original file size. While also fast to decompress and transcode.
+
+Image | Original size| Encoded size | Compressed size
 ---|---|---|---|
 image_with_alpha.tga | 65536 bytes | 22133 bytes | 15964 bytes |
-					 || 100% | 34 % | 24% |
+^^ | 100% | 34 % | 24% |
 
+Images are loaded using the [stb-image](https://github.com/StbSharp/StbImageSharp) library.
 
+# Attribution
 
+SuperCompressed builds upon the following libraries
+- [Basis Universal](https://github.com/BinomialLLC/basis_universal)
+- [ZstdSharp.Port](https://github.com/oleg-st/ZstdSharp)
+- [StbImageSharp](https://github.com/StbSharp/StbImageSharp)
 
-## Support
-SuperCompressed only supports projects that target .NET 6 and higher 
-
-The goal of this project is to provide a single NuGet packages that allows x64 C# projects to use the Basis Universal encoder and transcoder.
-
-Very much a work-in-progress. 
-
-
-
-## Notes
-When pulling the latest version of Basis Universal in the `src/external/basis_universal` submodule folder. Make sure to double check any new/renamed/removed files are present in `src/external/basisu_lib.vcxproj`
-
-## Reading List
-http://renderingpipeline.com/2012/07/texture-compression/
-
-
+The logo used for the NuGet package is [Video Card by Satawat Anukul from NounProject.com](https://thenounproject.com/icon/compress-1644730/)
 
 ![Logo Super Compressed](noun-video-card-4546862.png)
-
-*Logo: [Video Card by Satawat Anukul from NounProject.com](https://thenounproject.com/icon/compress-1644730/)*
-
-
-
-## TODO
-- Investigate if its usful to switch to ZstdNet: https://github.com/skbkontur/ZstdNet, https://facebook.github.io/zstd/, for faster decompression.
