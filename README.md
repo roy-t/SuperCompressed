@@ -12,12 +12,12 @@ Because of native components you can only use SuperCompressed in projets targett
 
 
 # Notes
-SuperCompressed uses Basis Universal's `UASTC`-mode. Which is the high-quality mode and is suitable for all texture types, including normal maps. Using Basis Universal's RDO optimization and further losless compression using the `Brotli` algorithm the image is super compressed.
+SuperCompressed uses Basis Universal's `UASTC`-mode. Which is the high-quality mode and is suitable for all texture types, including normal maps. Using Basis Universal's RDO optimization and further losless compression using the `zstd` algorithm the image is super compressed.
 
 Image | Original Size| Encoded Size | Supercompressed Size
 ---|---|---|---|
-image_with_alpha.tga | 65536 bytes | 22133 bytes | 14735 bytes |
-					 || 100% | 34 % | 22% |
+image_with_alpha.tga | 65536 bytes | 22133 bytes | 15964 bytes |
+					 || 100% | 34 % | 24% |
 
 
 
@@ -44,3 +44,6 @@ http://renderingpipeline.com/2012/07/texture-compression/
 *Logo: [Video Card by Satawat Anukul from NounProject.com](https://thenounproject.com/icon/compress-1644730/)*
 
 
+
+## TODO
+- Investigate if its usful to switch to ZstdNet: https://github.com/skbkontur/ZstdNet, https://facebook.github.io/zstd/, for faster decompression.

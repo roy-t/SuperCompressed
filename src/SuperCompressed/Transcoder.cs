@@ -1,5 +1,5 @@
-﻿using System.IO.Compression;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
+using ZstdSharp;
 
 namespace SuperCompressed
 {
@@ -25,18 +25,8 @@ namespace SuperCompressed
 
         private static ReadOnlySpan<byte> Decompress(ReadOnlySpan<byte> texture)
         {
-            var originalLength = BitConverter.ToInt32(texture.Slice(0, 4));
-            var decompressed = new byte[originalLength];
-
-            if (BrotliDecoder.TryDecompress(texture.Slice(4), decompressed, out var written))
-            {
-                if(written == originalLength)
-                {
-                    return decompressed;
-                }                
-            }
-
-            throw new Exception($"Failed to decompress texture data");
+            using var decompressor = new Decompressor();
+            return decompressor.Unwrap(texture);
         }
 
         public unsafe int GetImageCount(ReadOnlySpan<byte> texture)

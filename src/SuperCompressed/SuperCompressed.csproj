@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="StbImageSharp" Version="2.27.11" />
+    <PackageReference Include="ZstdSharp.Port" Version="0.6.1" />
   </ItemGroup>
   <PropertyGroup>
     <RuntimeIdentifier>win10-x64</RuntimeIdentifier>  
