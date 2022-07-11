@@ -33,16 +33,17 @@
   <PropertyGroup>
     <RuntimeIdentifier>win10-x64</RuntimeIdentifier>  
     <Authors>Roy Triesscheijn</Authors>
-    <Description>Easy to use C# wrapper of the Basis Universal Supercompressed GPU texture codec. Allows you to encode JPG/PNG/BMP/TGA/PSD/GIF images. and transcoded them to all the popular DirectX/OpenGL compressed texture formats. Such as BC7_RGBA, ETC2_RGBA and many others.</Description>
-    <PackageProjectUrl>github.com/roy-t/superCompressedDotNet</PackageProjectUrl>
+    <Description>SuperCompressed is a library that allows you to create, and work with, compressed texture formats in your game and multimedia applications. It uses Binomial's Basis Universal Supercompressed GPU Texture Codec. </Description>
+    <PackageProjectUrl>https://github.com/roy-t/superCompressedDotNet</PackageProjectUrl>
     <PackageIcon>noun-video-card-4546862.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>github.com/roy-t/superCompressedDotNet</RepositoryUrl>
-    <PackageTags>encoding, textures, transcoding, basisu, basis, basisuniversal, BC, ETC, PVRTC, ASTC, game development, engine, directx, opengl</PackageTags>
+    <RepositoryUrl>https://github.com/roy-t/superCompressedDotNet</RepositoryUrl>
+    <PackageTags>basisu, basis universal, ktx, texture compression, directx, opengl, vulkan, super compressed, compression, game engine</PackageTags>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <FileVersion>1.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Version>1.0.0-pre</Version>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
