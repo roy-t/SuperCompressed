@@ -44,7 +44,25 @@ EncodedTexture Encode(uint8_t* pImage, int32_t components, int32_t width, int32_
 		break;
 	}
 
-	params.m_mip_gen = mipMapGeneration == MipMapGeneration::Enabled;
+	params.m_mip_gen = mipMapGeneration != MipMapGeneration::Disabled;
+	if (mipMapGeneration == MipMapGeneration::Box) { params.m_mip_filter = "box"; }
+	if (mipMapGeneration == MipMapGeneration::Tent) { params.m_mip_filter = "tent"; }
+	if (mipMapGeneration == MipMapGeneration::Bell) { params.m_mip_filter = "bell"; }
+	if (mipMapGeneration == MipMapGeneration::BSpline) { params.m_mip_filter = "b-spline"; }
+	if (mipMapGeneration == MipMapGeneration::Mitchell) { params.m_mip_filter = "mitchell"; }
+	if (mipMapGeneration == MipMapGeneration::Blackman) { params.m_mip_filter = "blackman"; }
+	if (mipMapGeneration == MipMapGeneration::Lanczos3) { params.m_mip_filter = "lanczos3"; }
+	if (mipMapGeneration == MipMapGeneration::Lanczos4) { params.m_mip_filter = "lanczos4"; }
+	if (mipMapGeneration == MipMapGeneration::Lanczos6) { params.m_mip_filter = "lanczos6"; }
+	if (mipMapGeneration == MipMapGeneration::Lanczos12) { params.m_mip_filter = "lanczos12"; }
+	if (mipMapGeneration == MipMapGeneration::Kaiser) { params.m_mip_filter = "kaiser"; }
+	if (mipMapGeneration == MipMapGeneration::Gaussian) { params.m_mip_filter = "gaussian"; }
+	if (mipMapGeneration == MipMapGeneration::Catmullrom) { params.m_mip_filter = "catmullrom"; }
+	if (mipMapGeneration == MipMapGeneration::QuadraticInterpolation) { params.m_mip_filter = "quadratic_interp"; }
+	if (mipMapGeneration == MipMapGeneration::QuadraticApproximation) { params.m_mip_filter = "quadratic_approx"; }
+	if (mipMapGeneration == MipMapGeneration::QuadraticMix) { params.m_mip_filter = "quadratic_mix"; }
+
+	if (mipMapGeneration == MipMapGeneration::MMG_Default) { params.m_mip_filter = "kaiser"; }
 
 	job_pool jpool{ 8 };
 	params.m_pJob_pool = &jpool;

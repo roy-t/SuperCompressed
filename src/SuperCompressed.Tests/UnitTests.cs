@@ -1,3 +1,4 @@
+using BigGustave;
 using static Xunit.Assert;
 
 namespace SuperCompressed.Tests
@@ -11,9 +12,57 @@ namespace SuperCompressed.Tests
             var image = Image.FromStream(File.OpenRead(filename));
 
             var encoder = Encoder.Instance;
-            var encoded = encoder.Encode(image, Mode.SRgb, MipMapGeneration.Full, Quality.Slower);
+            var encoded = encoder.Encode(image, Mode.SRgb, MipMapGeneration.Default, Quality.Slower);
 
             True(encoded.Length > 0);
+        }
+
+        [Fact]
+        public void ShowFilterDifferences()
+        {
+            var filename = TestUtilities.GetTestFilename();
+            var uncompressed = Image.FromStream(File.OpenRead(filename));
+            var encoder = Encoder.Instance;
+            var transcoder = Transcoder.Instance;
+
+            var formats = Enum.GetValues<MipMapGeneration>();
+
+            //var formats = new MipMapGeneration[] { MipMapGeneration.Default };
+
+            foreach (var format in formats)
+            {
+                if(format == MipMapGeneration.Disabled) { continue; }
+
+                var encoded = encoder.Encode(uncompressed, Mode.SRgb, format, Quality.Slower);
+                using var transcoded = transcoder.Transcode(encoded, 0, 2, TranscodeFormats.RGBA32);
+
+                using var stream = File.Create($"{format}-{transcoded.Width}x{transcoded.Heigth}.png");
+                CreatePng(stream, transcoded.Width, transcoded.Heigth, transcoded.Data.ToArray());
+            }
+        }
+
+
+        private void CreatePng(FileStream stream, int width, int height, byte[] pixels)
+        {
+            var builder = PngBuilder.FromBgra32Pixels(pixels, width, height, true);
+            builder.Save(stream);
+            
+            //for (var i = 0; i < pixels.Length; i += 4)
+            //{
+            //    var r = pixels[i + 0];
+            //    var g = pixels[i + 1];
+            //    var b = pixels[i + 2];
+            //    var a = pixels[i + 3];
+
+
+            //    var x = i % width;
+            //    var y = i / width;
+
+            //    builder.SetPixel(r, g, b, x, y);
+
+            //}
+
+            //builder.Save(stream);            
         }
 
         [Fact]
@@ -23,7 +72,7 @@ namespace SuperCompressed.Tests
             var uncompressed = Image.FromStream(File.OpenRead(filename));
 
             var encoder = Encoder.Instance;
-            var encoded = encoder.Encode(uncompressed, Mode.SRgb, MipMapGeneration.Full, Quality.Slower);
+            var encoded = encoder.Encode(uncompressed, Mode.SRgb, MipMapGeneration.Lanczos4, Quality.Slower);
 
             True(encoded.Length > 0);
 

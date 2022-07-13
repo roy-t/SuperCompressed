@@ -23,7 +23,23 @@ extern "C"
     enum MipMapGeneration : uint8_t
     {
         Disabled,
-        Enabled,
+        MMG_Default,
+        Box,
+        Tent,
+        Bell,
+        BSpline,
+        Mitchell,
+        Blackman,
+        Lanczos3,
+        Lanczos4,
+        Lanczos6,
+        Lanczos12,
+        Kaiser,
+        Gaussian,
+        Catmullrom,
+        QuadraticInterpolation,
+        QuadraticApproximation,
+        QuadraticMix
     };
 
     enum EncodeErrors : uint8_t

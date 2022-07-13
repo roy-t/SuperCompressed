@@ -30,16 +30,18 @@ var image = new Image(/*byte[]*/ data, ColorComponents.RedGreenBlue, width, heig
 
 You can encode this image using the `Encoder` class. SuperCompressed can work in several different modes, which are useful for different kinds of images.
 - `Mode.SRgb`, for regular images, such as photos and diffuse textures
-- `Mode.Linear`, for linear data, such as heigthmaps and look-up tables
+- `Mode.Linear`, for linear data, such as heigth maps and look-up tables
 - `Mode.Normalized`, for normalized data, mostly normal maps
 
-You can also choose to generate [mipmaps](https://en.wikipedia.org/wiki/Mipmap) and choose from different quality settings.
+There are a few things you can configure:
+- [Mipmap](https://en.wikipedia.org/wiki/Mipmap) generation and the filter used to create the mipmaps. See [this](docs/Filters.md) document for an overview of supported filters and their effects.
+- Encoding quality settings.
 
 > **Warning**
-> Higher quality levels are significantly slower to encode and provide only a fractionaly better image quality. In most scenarios the default quality level should suffice.
+> Higher quality levels are significantly slower to encode and provide only a fractionally better image quality. In most scenarios the default quality level should suffice.
 
 ```C#
-Span<byte> encoded = Encoder.Instance.Encode(image, Mode.SRgb, MipMapGeneration.Full, Quality.Default);
+Span<byte> encoded = Encoder.Instance.Encode(image, Mode.SRgb, MipMapGeneration.Default /*Kaiser*/, Quality.Default);
 ```
 
 You can then write the data to disk using the standard .NET APIs.
@@ -116,12 +118,13 @@ For more examples checkout the [unit tests](src/SuperCompressed.Tests/UnitTests.
 SuperCompressed uses the [Basis Universal](https://github.com/BinomialLLC/basis_universal) GPU Texture Codec for encoding and transcoding textures.
 BasisU runs in `UASTC` mode with the RDO optimizations enabled. After encoding the texture is further compressed using the [zstd algorithm](https://github.com/oleg-st/ZstdSharp).
 
-All this leads to files that are frequently less than 25% of the original file size. While also fast to decompress and transcode.
+All this leads to files that are frequently less than 20% of the original file size. While also fast to decompress and transcode.
 
-Image | Original size| Encoded size | Compressed size
+Image | MipMaps | Original size | Encoded size | Compressed size
 ---|---|---|---|
-image_with_alpha.tga | 65536 bytes | 22133 bytes | 15964 bytes |
-^^ | 100% | 34 % | 24% |
+image_with_alpha.tga | Full | 65536 bytes | 22133 bytes | 15964 bytes |
+image_with_alpha.tga | None | 65536 bytes | 16484 bytes | 10737 bytes |
+
 
 Images are loaded using the [stb-image](https://github.com/StbSharp/StbImageSharp) library.
 
