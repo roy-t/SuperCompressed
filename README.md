@@ -30,7 +30,7 @@ var image = new Image(/*byte[]*/ data, ColorComponents.RedGreenBlue, width, heig
 
 You can encode this image using the `Encoder` class. SuperCompressed can work in several different modes, which are useful for different kinds of images.
 - `Mode.SRgb`, for regular images, such as photos and diffuse textures
-- `Mode.Linear`, for linear data, such as heigth maps and look-up tables
+- `Mode.Linear`, for linear data, such as height maps and look-up tables
 - `Mode.Normalized`, for normalized data, mostly normal maps
 
 There are a few things you can configure:

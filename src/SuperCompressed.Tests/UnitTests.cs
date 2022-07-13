@@ -44,7 +44,7 @@ namespace SuperCompressed.Tests
 
         private void CreatePng(FileStream stream, int width, int height, byte[] pixels)
         {
-            var builder = PngBuilder.FromBgra32Pixels(pixels, width, height, true);
+            var builder = PngBuilder.FromBgra32Pixels(pixels, width, height, false);
             builder.Save(stream);
             
             //for (var i = 0; i < pixels.Length; i += 4)
