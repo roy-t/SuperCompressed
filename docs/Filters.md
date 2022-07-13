@@ -2,6 +2,8 @@
 
 The following images show the effect of different filters on mipmap quality. All images were generated from a 128x128 TGA image (here stored as a PNG image so it is visible in your browser). Images are upscaled to 256x256 by your browser to make difference more apparent.
 
+For an interactive comparison visit [this site](https://roy-t.nl/mipmap_filters/)
+
 ## Original
 <image src="assets/original.png" width=256/>
 
