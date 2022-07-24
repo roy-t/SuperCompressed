@@ -19,8 +19,17 @@ namespace SuperCompressed
         /// Loads a JPG/PNG/BMP/TGA/PSD/GIF as Image using the StbImageSharp library
         /// </summary>
         public static Image FromStream(Stream stream)
-        {
+        {            
             var image = ImageResult.FromStream(stream);
+            return new Image(image.Data, (ColorComponents)image.Comp, image.Width, image.Height);
+        }
+
+        /// <summary>
+        /// Loads a JPG/PNG/BMP/TGA/PSD/GIF as Image using the StbImageSharp library
+        /// </summary>
+        public static Image FromMemory(byte[] bytes)
+        {
+            var image = ImageResult.FromMemory(bytes);
             return new Image(image.Data, (ColorComponents)image.Comp, image.Width, image.Height);
         }
 

@@ -2,6 +2,20 @@
 
 SuperCompressed is a library for creating 'super compressed' textures from images and transcoding those super compressed textures to common DirectX, OpenGL, and Vulkan [(compressed) pixel formats](http://renderingpipeline.com/2012/07/texture-compression/).
 
+# Benefits
+To measure the benefits I've tested the famous Sponza scene (with textures for Physically Based Rendering by [Alexandre Pestana](https://www.alexandre-pestana.com/pbr-textures-sponza/)) in my [toy engine](github.com/roy-t/MiniEngine3). 
+
+Method | Total Texture Size on Disk | Total Texture Size in GPU Memory |
+---|---|---|
+Uncompressed | 218MB | 870 MB |
+SuperCompressed | 70 MB | 672 MB |
+
+Notes:
+
+_1. SuperCompressed textures are encoded using the default encoding speed and include mipmaps_
+
+_2. SuperCompressed textures use the BC7\_* format, uncompressed textures use the B8G8R8A8\_* format_
+
 # How does it work?
 
 ## Installation
@@ -11,7 +25,7 @@ You can install SuperCompressed via the NuGet package manager, or directly via t
 dotnet add package SuperCompressed
 ```
 > **Warning**
-> Because of a native component, SuperCompressed works only on 64bit .NET 6 or higher applications, targetting Windows 7 or higher. In general this is not a problem since you are probably also targetting a native Graphics API if you are using this library.
+> Because of a native component, SuperCompressed works only on 64bit .NET 6 or higher applications, targeting Windows 7 or higher. In general this is not a problem since you are probably also targeting a native Graphics API if you are using this library.
 
 ## Loading an image
 SuperCompressed can load any JPG/PNG/TGA/BMP/PSD/GIF image for you. Alternatively you can bring your own image data as a byte array with 1, 2, 3 or 4 color components per pixel.
@@ -121,7 +135,7 @@ BasisU runs in `UASTC` mode with the RDO optimizations enabled. After encoding t
 All this leads to files that are frequently less than 20% of the original file size. While also fast to decompress and transcode.
 
 Image | MipMaps | Original size | Encoded size | Compressed size
----|---|---|---|
+---|---|---|---|---|
 image_with_alpha.tga | Full | 65536 bytes | 22133 bytes | 15964 bytes |
 image_with_alpha.tga | None | 65536 bytes | 16484 bytes | 10737 bytes |
 
